@@ -7,6 +7,7 @@ project(setup
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_executable(${PROJECT_NAME}
+    src/processInfo.cpp
     src/main.cpp
 )
 
