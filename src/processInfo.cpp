@@ -1,6 +1,8 @@
 #include "processInfo.hpp"
+#include "formatter.hpp"
 #include "project_type.hpp"
 #include "stringHelper.hpp"
+#include <algorithm>
 #include <cstddef>
 #include <cstdio>
 #include <cstdlib>
@@ -48,6 +50,14 @@ ProcessInfo::ProcessInfo(std::string pid, std::string path) {
 
     std::string& last = splitString[splitString.size() - 1];
 
+    if (last == "clang-format") {
+      Formatter oldformater = Formatter{
+          filename = ".clang-format",
+          filepath = entry.path().filename(),
+      };
+      oldFormatter_ = oldformater;
+    }
+
     if (last == "cpp" || last == "hpp") {
       typeCount[ProgramingLaunge::Cpp]++;
       continue;
@@ -67,6 +77,26 @@ ProcessInfo::ProcessInfo(std::string pid, std::string path) {
     std::cout << toString(key) << ": " << value << "\n";
   }
 
+  auto maxType = std::max_element(
+      typeCount.begin(), typeCount.end(), [](const auto& a, const auto& b) { return a < b; });
+
+  type_ = maxType->first;
+
+  if (oldFormatter_.has_value()) {
+    std::cout << oldFormatter_.value().filePath << "\n";
+    return;
+  }
+
+  switch (type_) {
+  case ProgramingLaunge::Cpp:
+    break;
+  case ProgramingLaunge::C:
+    break;
+  case ProgramingLaunge::Zig:
+    break;
+  case ProgramingLaunge::Rust:
+    break;
+  }
   // need to check what kid of project it is
   // after check if it contains a formater
   // if it does copy path and file name then change it to fx filename.temp

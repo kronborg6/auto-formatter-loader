@@ -37,5 +37,5 @@ class ProcessInfo {
     std::optional<Formatter> oldFormatter_;
 
     bool formater_ = false;
-    ProgramingLaunge type;
+    ProgramingLaunge type_;
 };
