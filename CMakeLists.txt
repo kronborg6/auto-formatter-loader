@@ -10,6 +10,7 @@ add_executable(${PROJECT_NAME}
     src/processInfo.cpp
     src/project_type.cpp
     src/stringHelper.cpp
+    src/config.cpp
     src/main.cpp
 )
 
