@@ -18,6 +18,7 @@ target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23)
 
 target_include_directories(${PROJECT_NAME} PRIVATE
     ${PROJECT_SOURCE_DIR}/include
+    ${PROJECT_SOURCE_DIR}/include/formatter
 )
 
 target_compile_options(${PROJECT_NAME} PRIVATE
