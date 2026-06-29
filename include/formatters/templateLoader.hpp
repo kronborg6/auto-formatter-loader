@@ -12,6 +12,10 @@ namespace option {
       TemplateLoader();
       explicit TemplateLoader(std::string path);
 
+      Formatter getFormatter(std::string key) const {
+        return formatters_.at(key);
+      }
+
     private:
       std::string path_;
       std::unordered_map<std::string, Formatter> formatters_;

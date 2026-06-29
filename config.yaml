@@ -1,0 +1,7 @@
+IDE:
+  - "nvim"
+  - "code"
+
+formatters:
+  - cpp:
+      formatter: ".clang-formatter"

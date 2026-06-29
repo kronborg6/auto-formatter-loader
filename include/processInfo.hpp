@@ -7,6 +7,8 @@
 
 bool match_name(const std::string& pid, const std::string& target);
 
+// not sure if it need to get a refresh of all template options or have a function that set the
+// formater via a template
 class ProcessInfo {
   public:
     ProcessInfo(std::string pid, std::string path);
