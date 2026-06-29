@@ -1,5 +1,6 @@
 #include "processInfo.hpp"
 #include "formatters/formatter.hpp"
+#include "formatters/templateLoader.hpp"
 #include "project_type.hpp"
 #include "stringHelper.hpp"
 #include <algorithm>
@@ -7,6 +8,7 @@
 #include <filesystem>
 #include <fstream>
 #include <iostream>
+#include <memory>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
@@ -14,7 +16,10 @@
 #include <vector>
 namespace fs = std::filesystem;
 
-ProcessInfo::ProcessInfo(std::string pid, std::string path) {
+ProcessInfo::ProcessInfo(std::string pid,
+                         std::string path,
+                         // const std::unordered_map<std::string, Formatter>& formatters) {
+                         const option::TemplateLoader& formatters) {
   if (pid.empty())
     throw std::invalid_argument("pid cannot be emty");
   if (path.empty())
@@ -80,6 +85,7 @@ ProcessInfo::ProcessInfo(std::string pid, std::string path) {
 
   type_ = maxType->first;
 
+  std::cout << std::boolalpha << "has_value = " << oldFormatter_.has_value() << '\n';
   if (oldFormatter_.has_value()) {
     std::cout << oldFormatter_.value().filePath << "\n";
     return;
@@ -87,6 +93,13 @@ ProcessInfo::ProcessInfo(std::string pid, std::string path) {
 
   switch (type_) {
   case ProgramingLaunge::Cpp:
+    // need to get formater from config
+    // if (std::unordered_map<std::string, Formatter>::const_iterator it =
+    //         formatters.find(".clang-format");
+    //     it != formatters.end()) {
+    //   formatterTemplate_ = &it->second;
+    // }
+    formatterTemplate_ = &formatters.getFormatter(".clang-format");
     break;
   case ProgramingLaunge::C:
     break;

@@ -1,9 +1,12 @@
 #pragma once
 
 #include "formatters/formatter.hpp"
+#include "formatters/templateLoader.hpp"
 #include "project_type.hpp"
+#include <memory>
 #include <optional>
 #include <string>
+#include <unordered_map>
 
 bool match_name(const std::string& pid, const std::string& target);
 
@@ -11,12 +14,15 @@ bool match_name(const std::string& pid, const std::string& target);
 // formater via a template
 class ProcessInfo {
   public:
-    ProcessInfo(std::string pid, std::string path);
-    ProcessInfo(ProcessInfo&&) = default;
-    ProcessInfo(const ProcessInfo&) = default;
-    ProcessInfo& operator=(ProcessInfo&&) = default;
-    ProcessInfo& operator=(const ProcessInfo&) = default;
-    ~ProcessInfo() = default;
+    ProcessInfo(std::string pid,
+                std::string path,
+                // const std::unordered_map<std::string, Formatter>& formatters);
+                const option::TemplateLoader& templates);
+    // ProcessInfo(ProcessInfo&&) = default;
+    // ProcessInfo(const ProcessInfo&) = default;
+    // ProcessInfo& operator=(ProcessInfo&&) = default;
+    // ProcessInfo& operator=(const ProcessInfo&) = default;
+    // ~ProcessInfo() = default;
 
     bool deletFormater();
     bool createFormater();
@@ -36,6 +42,7 @@ class ProcessInfo {
     std::string file_;
 
     Formatter formatter_;
+    const Formatter* formatterTemplate_ = nullptr;
     std::optional<Formatter> oldFormatter_;
 
     bool formater_ = false;
