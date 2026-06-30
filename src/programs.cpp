@@ -18,6 +18,7 @@ bool Programs::CreateNewFormatter(const std::filesystem::directory_entry& entry,
 
     if (!formaters.contains(cwd.string())) {
       formaters.emplace(cwd.string(), process);
+      process.enable();
     }
   }
   return false;

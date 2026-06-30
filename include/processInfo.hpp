@@ -1,5 +1,6 @@
 #pragma once
 
+#include "filesystem"
 #include "formatters/formatter.hpp"
 #include "formatters/templateLoader.hpp"
 #include "project_type.hpp"
@@ -36,6 +37,8 @@ class ProcessInfo {
       return path_;
     }
 
+    void enable();
+
   private:
     std::string pid_;
     std::string path_;
@@ -46,5 +49,6 @@ class ProcessInfo {
     std::optional<Formatter> oldFormatter_;
 
     bool formater_ = false;
+    bool isEnable_ = false;
     ProgramingLaunge type_;
 };

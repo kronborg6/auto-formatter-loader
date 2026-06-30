@@ -93,12 +93,6 @@ ProcessInfo::ProcessInfo(std::string pid,
 
   switch (type_) {
   case ProgramingLaunge::Cpp:
-    // need to get formater from config
-    // if (std::unordered_map<std::string, Formatter>::const_iterator it =
-    //         formatters.find(".clang-format");
-    //     it != formatters.end()) {
-    //   formatterTemplate_ = &it->second;
-    // }
     formatterTemplate_ = &formatters.getFormatter(".clang-format");
     break;
   case ProgramingLaunge::C:
@@ -120,6 +114,17 @@ bool match_name(const std::string& pid, const std::string& target) {
   std::string name;
   std::getline(f, name);
   return name == target;
+}
+
+void ProcessInfo::enable() {
+  if (formatterTemplate_ == nullptr || isEnable_ || oldFormatter_.has_value())
+    return;
+
+  if (!fs::exists(this->path_ + "/" + this->formatterTemplate_->filename)) {
+    fs::create_symlink(formatterTemplate_->filePath,
+                       this->path_ + "/" + this->formatterTemplate_->filename);
+    std::cout << "created system link\n";
+  }
 }
 
 bool ProcessInfo::createFormater(std::string formaterPath) {
