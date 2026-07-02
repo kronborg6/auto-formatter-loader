@@ -1,0 +1,28 @@
+IDE:
+  - "nvim"
+  - "code"
+
+formatters:
+  - cpp:
+      formatter: ".clang-formatter"
+      filetype:
+        - ".cpp"
+        - ".hpp"
+        - ".h"
+  - c:
+      formatter: ".clang-formatter"
+      filetype:
+        - ".c"
+        - ".h"
+  - rust:
+      formatter: ".rustfmt.toml"
+      filetype:
+        - ".rs"
+  - odin:
+      formatter: "odinfmt.json"
+      filetype:
+        - ".odin"
+  - Csharp:
+      formatter: ".editorconfig"
+      filetype:
+        - ".cs"
