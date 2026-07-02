@@ -18,3 +18,10 @@ or se if i can make it run in the backgound and get wait for a IDE to start
 then i wan't it to check if they is a .clang-format if it a c++ project if not create one
 maby im not sure about this but when i queit the ide maby delete the formanter or i need to add it to .gitignore
 becus i don't wan't to force my format onto any one
+
+
+
+## Config and Template
+
+the config standard path is in the home folder with the name .auto-formatter.yaml
+the standard path for the Template folder is ~/.dotfile/auto-formatter/templates
