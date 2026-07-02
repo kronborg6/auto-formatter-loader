@@ -1,6 +1,6 @@
 #pragma once
 
-#include "langues.hpp"
+#include "language.hpp"
 #include <filesystem>
 #include <string>
 #include <unordered_map>
@@ -16,7 +16,7 @@ namespace option {
     private:
       fs::path path_;
       std::string filename_;
-      std::vector<Languge> languge_;
+      std::vector<Language> languge_;
       std::vector<std::string> ides_;
   };
 
