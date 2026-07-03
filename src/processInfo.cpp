@@ -21,10 +21,12 @@ ProcessInfo::~ProcessInfo() {
   if (isEnable_ && fs::is_symlink(this->path_ + "/" + this->formatterTemplate_->filename)) {
 
     if (fs::remove(this->path_ + "/" + this->formatterTemplate_->filename)) {
-      std::cout << "i remove the link" << "\n";
+      std::cout << "i remove the link"
+                << "\n";
     } else {
 
-      std::cout << "failed to remove the link" << "\n";
+      std::cout << "failed to remove the link"
+                << "\n";
     }
   }
 }
@@ -92,6 +94,9 @@ ProcessInfo::ProcessInfo(std::string pid,
   for (const auto& [key, value] : typeCount) {
     std::cout << toString(key) << ": " << value << "\n";
   }
+
+  if (typeCount.empty())
+    return;
 
   auto maxType = std::max_element(
       typeCount.begin(), typeCount.end(), [](const auto& a, const auto& b) { return a < b; });

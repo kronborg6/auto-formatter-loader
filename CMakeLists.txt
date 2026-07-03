@@ -3,7 +3,9 @@ project(setup
     VERSION 0.1.0
     LANGUAGES CXX
 )
-
+if(NOT CMAKE_BUILD_TYPE)
+    set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type" FORCE)
+endif()
 option(DEV_MODE "Enbale debug print" OFF)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -56,5 +58,9 @@ target_compile_options(${PROJECT_NAME} PRIVATE
         -Wnull-dereference
         -Wdouble-promotion
         -Wformat=2
+
+        $<$<CONFIG:Debug>:-g>
+        $<$<CONFIG:Debug>:-O0>
+        $<$<CONFIG:Debug>:-fno-omit-frame-pointer>
 )
 
