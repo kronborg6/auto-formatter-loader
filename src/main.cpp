@@ -1,3 +1,4 @@
+#include "formatters/config.hpp"
 #include "formatters/templateLoader.hpp"
 #include "iostream"
 #include "progams.hpp"
@@ -10,10 +11,10 @@
 
 int main(void) {
   try {
-    YAML::Node config = YAML::LoadFile("/home/kronborg/project/setup/config.yaml");
-    const std::string username = config["username"].as<std::string>();
+    option::Config config =
+        option::Config(YAML::LoadFile("/home/kronborg/project/setup/config.yaml"));
+    // YAML::Node config = YAML::LoadFile("/home/kronborg/project/setup/config.yaml");
     std::cout << "Loaded config\n";
-    std::cout << "username: " + username << std::endl;
   } catch (const YAML::BadFile& e) {
     std::cerr << "Could not open config file: " << e.what() << '\n';
   }

@@ -1,9 +1,9 @@
 #pragma once
 
 #include "language.hpp"
+#include "yaml-cpp/node/node.h"
 #include <filesystem>
 #include <string>
-#include <unordered_map>
 #include <vector>
 namespace fs = std::filesystem;
 
@@ -11,6 +11,7 @@ namespace option {
   class Config {
     public:
       Config();
+      Config(YAML::Node node);
       Config(fs::path path);
 
     private:

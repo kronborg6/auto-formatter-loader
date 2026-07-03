@@ -34,4 +34,6 @@ namespace option {
   }
   Config::Config(fs::path path) {
   }
+  Config::Config(YAML::Node node) {
+  }
 } // namespace option
