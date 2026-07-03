@@ -1,5 +1,6 @@
 #pragma once
 
+#include "formatters/config.hpp"
 #include "processInfo.hpp"
 
 #include <filesystem>
@@ -10,5 +11,6 @@ struct Programs {
     std::unordered_map<std::string, ProcessInfo> formaters;
 
     bool CreateNewFormatter(const std::filesystem::directory_entry& entry,
+                            const option::Config& config,
                             const option::TemplateLoader& templates);
 };

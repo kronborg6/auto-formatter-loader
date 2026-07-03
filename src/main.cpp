@@ -10,14 +10,7 @@
 #include <string>
 
 int main(void) {
-  try {
-    option::Config config = option::Config(YAML::LoadFile("/home/kronborg/.auto-formatter.yaml"));
-    // YAML::Node config =
-    // YAML::LoadFile("/home/kronborg/project/setup/config.yaml");
-    std::cout << "Loaded config\n";
-  } catch (const YAML::BadFile& e) {
-    std::cerr << "Could not open config file: " << e.what() << '\n';
-  }
+  option::Config config = option::Config(YAML::LoadFile("/home/kronborg/.auto-formatter.yaml"));
   // YAML::Node config =
   // YAML::LoadFile("/home/kronborg/project/setup/config.yaml");
 
@@ -31,7 +24,7 @@ int main(void) {
   // this is how we are gona check what ides that is runing need to get options
   // from config
   for (auto& e : std::filesystem::directory_iterator("/proc")) {
-    progams.CreateNewFormatter(e, templates);
+    progams.CreateNewFormatter(e, config, templates);
   }
 
   for (const auto& [key, x] : progams.formaters) {

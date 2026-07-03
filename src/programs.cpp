@@ -4,8 +4,9 @@
 #include <cctype>
 #include <filesystem>
 
-bool Programs::CreateNewFormatter(const std::filesystem::directory_entry &entry,
-                                  const option::TemplateLoader &templates) {
+bool Programs::CreateNewFormatter(const std::filesystem::directory_entry& entry,
+                                  const option::Config& config,
+                                  const option::TemplateLoader& templates) {
   if (!entry.is_directory())
     return false;
 
