@@ -29,6 +29,8 @@ int main(void) {
 
   for (const auto& [key, x] : progams.formaters) {
 
+    std::cout << "pid: " << x.getPid() << "CWD: " << x.getPath() << std::endl;
+
     // std::println("pid: {}, CWD: {}", x.getPid(), x.getPath());
   }
   return 0;
