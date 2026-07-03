@@ -14,6 +14,24 @@ class Config {
     Config(YAML::Node node);
     Config(fs::path path);
 
+    std::vector<Language> getLauges() const {
+      return languge_;
+    }
+    std::string getPrograming(const std::string& name) const {
+      for (const auto& lang : languge_) {
+        if (lang.name == name) {
+          return lang.name;
+        }
+      }
+    }
+    Language findLanuge(const std::string& name) const {
+      for (const auto& lang : languge_) {
+        if (lang.name == name) {
+          return lang;
+        }
+      }
+    }
+
   private:
     fs::path path_;
     std::string filename_;

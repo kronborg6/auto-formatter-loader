@@ -23,6 +23,7 @@ int main(void) {
 
   // this is how we are gona check what ides that is runing need to get options
   // from config
+  auto temp = std::filesystem::directory_iterator("/proc");
   for (auto& e : std::filesystem::directory_iterator("/proc")) {
     progams.CreateNewFormatter(e, config, templates);
   }

@@ -1,6 +1,8 @@
 #include "processInfo.hpp"
+#include "formatters/config.hpp"
 #include "formatters/formatter.hpp"
 #include "formatters/templateLoader.hpp"
+#include "language.hpp"
 #include "project_type.hpp"
 #include "stringHelper.hpp"
 #include <algorithm>
@@ -33,8 +35,8 @@ ProcessInfo::~ProcessInfo() {
 
 ProcessInfo::ProcessInfo(std::string pid,
                          std::string path,
-                         // const std::unordered_map<std::string, Formatter>& formatters) {
-                         const option::TemplateLoader& formatters) {
+                         const option::Config& config,
+                         const option::TemplateLoader& templates) {
   if (pid.empty())
     throw std::invalid_argument("pid cannot be emty");
   if (path.empty())
@@ -47,7 +49,15 @@ ProcessInfo::ProcessInfo(std::string pid,
 
   const auto options = fs::directory_options::skip_permission_denied;
 
-  std::unordered_map<ProgramingLaunge, int> typeCount;
+  std::unordered_map<std::string, int> typeCount;
+
+  // make the filetype ProgramingLaunge hash_maps here
+  std::unordered_map<std::string, std::string> all;
+  for (const auto& lang : config.getLauges()) {
+    for (const auto& type : lang.filetypes) {
+      all[lang.name] = type;
+    }
+  }
 
   for (fs::recursive_directory_iterator it(path, options), end; it != end; ++it) {
 
@@ -60,13 +70,21 @@ ProcessInfo::ProcessInfo(std::string pid,
         continue;
       }
     }
+    std::string filename = entry.path().filename().string();
 
-    std::string filename = entry.path().filename().string().substr(
-        entry.path().filename().string().find_last_of("/") + 1);
+    std::size_t dotPos = filename.find_last_of('.');
 
-    std::vector<std::string> splitString = split(filename, ".");
+    if (dotPos == std::string::npos) {
+      continue; // no extension
+    }
 
-    std::string& last = splitString[splitString.size() - 1];
+    std::string last = filename.substr(dotPos + 1);
+    // std::string filename = entry.path().filename().string().substr(
+    //     entry.path().filename().string().find_last_of("/") + 1);
+    //
+    // std::vector<std::string> splitString = split(filename, ".");
+    //
+    // std::string& last = splitString[splitString.size() - 1];
 
     if (last == "clang-format") {
       Formatter oldformater = Formatter{
@@ -76,27 +94,35 @@ ProcessInfo::ProcessInfo(std::string pid,
       oldFormatter_ = oldformater;
     }
 
-    if (last == "cpp" || last == "hpp") {
-      typeCount[ProgramingLaunge::Cpp]++;
-      continue;
-    } else if (last == "c" || last == "h") {
-      std::cout << entry.path() << '\n';
-      std::cout << entry.path() << '\n';
-      typeCount[ProgramingLaunge::C]++;
-      continue;
-    } else if (last == "zig") {
-      typeCount[ProgramingLaunge::Zig]++;
-      continue;
+    // need to change this to use langue from config
+    // i was thinking about making hash_maps where the filetype is the key and ProgramingLaunge is
+    // the value
+
+    // if (last == "cpp" || last == "hpp") {
+    //   typeCount[ProgramingLaunge::Cpp]++;
+    //   continue;
+    // } else if (last == "c" || last == "h") {
+    //   std::cout << entry.path() << '\n';
+    //   std::cout << entry.path() << '\n';
+    //   typeCount[ProgramingLaunge::C]++;
+    //   continue;
+    // } else if (last == "zig") {
+    //   typeCount[ProgramingLaunge::Zig]++;
+    //   continue;
+    // }
+    if (all.contains(last)) {
+      typeCount[last]++;
     }
     std::cout << entry.path() << '\n';
   }
 
   for (const auto& [key, value] : typeCount) {
-    std::cout << toString(key) << ": " << value << "\n";
+    std::cout << key << ": " << value << "\n";
   }
 
-  if (typeCount.empty())
+  if (typeCount.empty()) {
     return;
+  }
 
   auto maxType = std::max_element(
       typeCount.begin(), typeCount.end(), [](const auto& a, const auto& b) { return a < b; });
@@ -109,17 +135,21 @@ ProcessInfo::ProcessInfo(std::string pid,
     return;
   }
 
-  switch (type_) {
-  case ProgramingLaunge::Cpp:
-    formatterTemplate_ = &formatters.getFormatter(".clang-format");
-    break;
-  case ProgramingLaunge::C:
-    break;
-  case ProgramingLaunge::Zig:
-    break;
-  case ProgramingLaunge::Rust:
-    break;
-  }
+  Language la = config.findLanuge(type_);
+
+  formatterTemplate_ = &templates.getFormatter(la.formatter);
+
+  // switch (type_) {
+  // case ProgramingLaunge::Cpp:
+  //   formatterTemplate_ = &formatters.getFormatter(".clang-format");
+  //   break;
+  // case ProgramingLaunge::C:
+  //   break;
+  // case ProgramingLaunge::Zig:
+  //   break;
+  // case ProgramingLaunge::Rust:
+  //   break;
+  // }
   // need to check what kid of project it is
   // after check if it contains a formater
   // if it does copy path and file name then change it to fx filename.temp

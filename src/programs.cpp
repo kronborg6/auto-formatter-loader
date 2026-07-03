@@ -17,7 +17,7 @@ bool Programs::CreateNewFormatter(const std::filesystem::directory_entry& entry,
 
   if (match_name(pid, "nvim")) {
     auto cwd = std::filesystem::read_symlink("/proc/" + pid + "/cwd");
-    ProcessInfo process = ProcessInfo(pid, cwd.string(), templates);
+    ProcessInfo process = ProcessInfo(pid, cwd.string(), config, templates);
 
     if (!formaters.contains(cwd.string())) {
       formaters.emplace(cwd.string(), process);

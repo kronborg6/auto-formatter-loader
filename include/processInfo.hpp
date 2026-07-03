@@ -1,6 +1,7 @@
 #pragma once
 
 #include "filesystem"
+#include "formatters/config.hpp"
 #include "formatters/formatter.hpp"
 #include "formatters/templateLoader.hpp"
 #include "project_type.hpp"
@@ -17,7 +18,7 @@ class ProcessInfo {
   public:
     ProcessInfo(std::string pid,
                 std::string path,
-                // const std::unordered_map<std::string, Formatter>& formatters);
+                const option::Config& config,
                 const option::TemplateLoader& templates);
     // ProcessInfo(ProcessInfo&&) = default;
     // ProcessInfo(const ProcessInfo&) = default;
@@ -54,5 +55,6 @@ class ProcessInfo {
 
     bool formater_ = false;
     bool isEnable_ = false;
-    ProgramingLaunge type_;
+    std::string type_;
+    // ProgramingLaunge type_;
 };
