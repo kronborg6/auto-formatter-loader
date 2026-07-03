@@ -11,29 +11,45 @@
 namespace fs = std::filesystem;
 
 namespace option {
-  Config::Config() {
-    const char* home = std::getenv("HOME");
-    if (!home)
-      throw std::invalid_argument("");
+Config::Config() {
+  const char* home = std::getenv("HOME");
+  if (!home)
+    throw std::invalid_argument("");
 
-    fs::path configPath = fs::path(home) / ".auto-formatter.yaml";
+  fs::path path = fs::path(home) / ".auto-formatter.yaml";
 
-    if (!fs::exists(configPath))
-      throw std::invalid_argument("");
+  if (!fs::exists(path))
+    throw std::invalid_argument("failed to find config (.auto-formatter.yaml) at: " +
+                                path.string());
 
-    YAML::Node config = YAML::LoadFile(configPath);
+  Config::LoadFromNode(YAML::LoadFile(path));
+}
+Config::Config(fs::path path) {
 
-    if (config["IDE"]) {
-      this->ides_ = config["IDE"].as<std::vector<std::string>>();
-    }
+  if (!fs::exists(path))
+    throw std::invalid_argument("failed to find config.yaml file at: " + path.string());
 
-    if (config["formatters"]) {
-      // std::vector<Language> lang ;
-      languge_ = config["formatters"].as<std::vector<Language>>();
-    }
+  path_ = path;
+  filename_ = path.filename();
+
+  Config::LoadFromNode(YAML::LoadFile(path));
+
+  // YAML::Node config = YAML
+}
+Config::Config(YAML::Node config) {
+
+  Config::LoadFromNode(config);
+}
+
+void Config::LoadFromNode(const YAML::Node& node) {
+
+  if (node["IDE"]) {
+    ides_ = node["IDE"].as<std::vector<std::string>>();
   }
-  Config::Config(fs::path path) {
+
+  if (node["formatters"]) {
+    languge_ = node["formatters"].as<std::vector<Language>>();
   }
-  Config::Config(YAML::Node node) {
-  }
+}
+
 } // namespace option
