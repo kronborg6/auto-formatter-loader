@@ -45,7 +45,8 @@ ProcessInfo::ProcessInfo(std::string pid,
   pid_ = pid;
   path_ = path;
 
-  const std::unordered_set<std::string> folders_to_skip = {".git", "build"};
+  const std::vector<std::string> folders_to_skip = config.getExludeFolders();
+  // const std::unordered_set<std::string> folders_to_skip = config.getExludeFolders();
 
   const auto options = fs::directory_options::skip_permission_denied;
 

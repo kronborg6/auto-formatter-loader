@@ -4,6 +4,7 @@
 #include "yaml-cpp/node/node.h"
 #include <filesystem>
 #include <string>
+#include <unordered_set>
 #include <vector>
 namespace fs = std::filesystem;
 
@@ -30,6 +31,15 @@ class Config {
           return lang;
         }
       }
+    }
+    template <typename T> T getExcludeFolders() const;
+    template <> std::vector<std::string> getExcludeFolders<std::vector<std::string>>() const {
+      return excludeFolders_;
+    }
+    template <>
+    std::unordered_set<std::string> getExcludeFolders<std::unordered_set<std::string>>() const {
+      return std::unordered_set<std::string>(excludeFolders_.begin(), excludeFolders_.end());
+      ;
     }
 
   private:
