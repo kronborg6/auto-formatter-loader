@@ -132,6 +132,8 @@ ProcessInfo::ProcessInfo(std::string pid,
 
   Language la = config.findLanugeByFileType(type_);
 
+  // need to make a check her if la is null and make it so we don't crach if they is no formatter in
+  // templates
   formatterTemplate_ = &templates.getFormatter(la.formatter);
 
   // switch (type_) {
