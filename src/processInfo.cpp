@@ -62,6 +62,9 @@ ProcessInfo::ProcessInfo(std::string pid,
   }
 
   for (fs::recursive_directory_iterator it(path, options), end; it != end; ++it) {
+    if (it.depth() >= config.getDepth()) {
+      it.disable_recursion_pending();
+    }
 
     const fs::directory_entry& entry = *it;
     std::string filepath = entry.path().filename().string();
@@ -100,18 +103,6 @@ ProcessInfo::ProcessInfo(std::string pid,
     // i was thinking about making hash_maps where the filetype is the key and ProgramingLaunge is
     // the value
 
-    // if (last == "cpp" || last == "hpp") {
-    //   typeCount[ProgramingLaunge::Cpp]++;
-    //   continue;
-    // } else if (last == "c" || last == "h") {
-    //   std::cout << entry.path() << '\n';
-    //   std::cout << entry.path() << '\n';
-    //   typeCount[ProgramingLaunge::C]++;
-    //   continue;
-    // } else if (last == "zig") {
-    //   typeCount[ProgramingLaunge::Zig]++;
-    //   continue;
-    // }
     if (all.contains(last)) {
       typeCount[last]++;
     }

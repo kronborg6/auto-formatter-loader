@@ -37,6 +37,10 @@ class Config {
       return std::unordered_set<std::string>(excludeFolders_.begin(), excludeFolders_.end());
     }
 
+    int getDepth() const {
+      return depth_;
+    }
+
   private:
     fs::path path_;
     std::string filename_;
