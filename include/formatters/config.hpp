@@ -26,6 +26,15 @@ class Config {
         }
       }
     }
+    Language findLanugeByFileType(const std::string& name) const {
+      for (const auto& lang : languge_) {
+        for (const std::string& type : lang.filetypes) {
+          if (type == name) {
+            return lang;
+          }
+        }
+      }
+    }
     Language findLanuge(const std::string& name) const {
       for (const auto& lang : languge_) {
         if (lang.name == name) {
@@ -47,7 +56,7 @@ class Config {
     std::vector<Language> languge_;
     std::vector<std::string> ides_;
     std::vector<std::string> excludeFolders_ = {".git", "build"};
-    int maxDepth_ = 2;
+    int maxDepth_ = 4;
 
     void LoadFromNode(const YAML::Node& node);
 };

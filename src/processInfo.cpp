@@ -57,7 +57,7 @@ ProcessInfo::ProcessInfo(std::string pid,
   std::unordered_map<std::string, std::string> all;
   for (const auto& lang : config.getLauges()) {
     for (const auto& type : lang.filetypes) {
-      all[lang.name] = type;
+      all[type] = lang.name;
     }
   }
 
@@ -84,6 +84,7 @@ ProcessInfo::ProcessInfo(std::string pid,
     }
 
     std::string last = filename.substr(dotPos + 1);
+
     // std::string filename = entry.path().filename().string().substr(
     //     entry.path().filename().string().find_last_of("/") + 1);
     //
@@ -114,6 +115,7 @@ ProcessInfo::ProcessInfo(std::string pid,
   }
 
   if (typeCount.empty()) {
+    std::cout << "no matchs PID: " << pid << std::endl;
     return;
   }
 
@@ -128,7 +130,7 @@ ProcessInfo::ProcessInfo(std::string pid,
     return;
   }
 
-  Language la = config.findLanuge(type_);
+  Language la = config.findLanugeByFileType(type_);
 
   formatterTemplate_ = &templates.getFormatter(la.formatter);
 
