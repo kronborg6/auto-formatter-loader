@@ -37,6 +37,8 @@ class Config {
     std::string filename_;
     std::vector<Language> languge_;
     std::vector<std::string> ides_;
+    std::vector<std::string> excludeFolders_ = {".git", "build"};
+    int depth_ = 2;
 
     void LoadFromNode(const YAML::Node& node);
 };
