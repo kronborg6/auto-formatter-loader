@@ -5,16 +5,12 @@
 #include "yaml-cpp/node/node.h"
 #include "yaml-cpp/node/parse.h"
 #include <filesystem>
-#include <yaml-cpp/yaml.h>
-// #include <print>
+#include <ranges>
 #include <string>
+#include <yaml-cpp/yaml.h>
 
 int main(void) {
   option::Config config = option::Config(YAML::LoadFile("/home/kronborg/.auto-formatter.yaml"));
-  // YAML::Node config =
-  // YAML::LoadFile("/home/kronborg/project/setup/config.yaml");
-
-  // std::println("dev: {}", config["DEV"].as<std::string>());
 
   Programs progams;
   // need to make a load from config her
@@ -28,7 +24,7 @@ int main(void) {
     progams.CreateNewFormatter(e, config, templates);
   }
 
-  for (const auto& [key, x] : progams.formaters) {
+  for (const auto& x : progams.formaters | std::views::values) {
 
     std::cout << "pid: " << x.getPid() << "CWD: " << x.getPath() << std::endl;
 
