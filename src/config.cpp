@@ -63,8 +63,8 @@ void Config::LoadFromNode(const YAML::Node& node) {
     // wee need to no this
   }
 
-  if (node["depth"]) {
-    depth_ = node["depth"].as<int>();
+  if (node["maxDepth"]) {
+    maxDepth_ = node["depth"].as<int>();
   }
 
   if (node["exludeFolders"]) {

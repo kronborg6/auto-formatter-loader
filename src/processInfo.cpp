@@ -62,7 +62,7 @@ ProcessInfo::ProcessInfo(std::string pid,
   }
 
   for (fs::recursive_directory_iterator it(path, options), end; it != end; ++it) {
-    if (it.depth() >= config.getDepth()) {
+    if (it.depth() >= config.getMaxDepth()) {
       it.disable_recursion_pending();
     }
 

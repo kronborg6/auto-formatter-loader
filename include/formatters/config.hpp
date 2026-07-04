@@ -37,8 +37,8 @@ class Config {
       return std::unordered_set<std::string>(excludeFolders_.begin(), excludeFolders_.end());
     }
 
-    int getDepth() const {
-      return depth_;
+    int getMaxDepth() const {
+      return maxDepth_;
     }
 
   private:
@@ -47,7 +47,7 @@ class Config {
     std::vector<Language> languge_;
     std::vector<std::string> ides_;
     std::vector<std::string> excludeFolders_ = {".git", "build"};
-    int depth_ = 2;
+    int maxDepth_ = 2;
 
     void LoadFromNode(const YAML::Node& node);
 };
