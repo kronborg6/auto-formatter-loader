@@ -45,8 +45,9 @@ ProcessInfo::ProcessInfo(std::string pid,
   pid_ = pid;
   path_ = path;
 
-  const std::vector<std::string> folders_to_skip = config.getExludeFolders();
-  // const std::unordered_set<std::string> folders_to_skip = config.getExludeFolders();
+  // const std::unordered_set<std::string> folders_to_skip =
+  //     config.getExcludeFolders<std::unordered_set<std::string>>();
+  const std::unordered_set<std::string> folders_to_skip = config.getExcludeFolders();
 
   const auto options = fs::directory_options::skip_permission_denied;
 

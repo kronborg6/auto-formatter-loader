@@ -11,6 +11,7 @@ namespace fs = std::filesystem;
 namespace option {
 class Config {
   public:
+    // template <typename T> T getExcludeFolders() const;
     Config();
     Config(YAML::Node node);
     Config(fs::path path);
@@ -32,14 +33,8 @@ class Config {
         }
       }
     }
-    template <typename T> T getExcludeFolders() const;
-    template <> std::vector<std::string> getExcludeFolders<std::vector<std::string>>() const {
-      return excludeFolders_;
-    }
-    template <>
-    std::unordered_set<std::string> getExcludeFolders<std::unordered_set<std::string>>() const {
+    std::unordered_set<std::string> getExcludeFolders() const {
       return std::unordered_set<std::string>(excludeFolders_.begin(), excludeFolders_.end());
-      ;
     }
 
   private:
@@ -53,4 +48,13 @@ class Config {
     void LoadFromNode(const YAML::Node& node);
 };
 
+// template <>
+// inline std::vector<std::string> Config::getExcludeFolders<std::vector<std::string>>() const {
+//   return excludeFolders_;
+// }
+//
+// template <>
+// inline std::unordered_set<std::string>
+// Config::getExcludeFolders<std::unordered_set<std::string>>() const {
+//   return std::unordered_set<std::string>(excludeFolders_.begin(), excludeFolders_.end());
 } // namespace option
