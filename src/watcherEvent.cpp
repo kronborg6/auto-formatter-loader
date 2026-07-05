@@ -16,11 +16,13 @@
 #include <vector>
 
 std::string testHelper(uint32_t mask) {
-  switch (mask & (IN_CREATE | IN_DELETE)) {
+  switch (mask & (IN_CREATE | IN_DELETE | IN_MOVED_TO)) {
   case IN_CREATE:
     return "created a new ";
   case IN_DELETE:
     return "deleted a ";
+  case IN_MOVED_TO:
+    return "move a ";
   defualt:
     return "undifind cruse of action";
   }

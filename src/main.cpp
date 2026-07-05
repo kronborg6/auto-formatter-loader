@@ -64,7 +64,8 @@ int main(void) {
     exit(EXIT_FAILURE);
   }
 
-  wd = inotify_add_watch(fd, "/home/kronborg/project/setup/ideas", IN_CREATE | IN_DELETE);
+  wd = inotify_add_watch(fd, "/proc", IN_CREATE | IN_DELETE | IN_MOVED_TO);
+  // wd = inotify_add_watch(fd, "/home/kronborg/project/setup/ideas", IN_CREATE | IN_DELETE);
 
   if (wd == -1) {
     std::cout << "failed to create watch " << strerror(errno);
