@@ -11,14 +11,15 @@ option(DEV_MODE "Enbale debug print" OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_executable(${PROJECT_NAME}
+    src/main.cpp
     src/processInfo.cpp
     src/project_type.cpp
     src/stringHelper.cpp
     src/programs.cpp
     src/templateLoader.cpp
     src/config.cpp
-    src/main.cpp
     src/language.cpp
+    src/watcherEvent.cpp
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE
