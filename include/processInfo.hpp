@@ -11,6 +11,7 @@
 #include <unordered_map>
 
 bool match_name(const std::string& pid, const std::string& target);
+bool match_name(const std::string& pid, const std::set<std::string>& target);
 
 // not sure if it need to get a refresh of all template options or have a function that set the
 // formater via a template
@@ -40,6 +41,10 @@ class ProcessInfo {
 
     std::string getPath() const {
       return path_;
+    }
+
+    bool getIsEnable() const {
+      return isEnable_;
     }
 
     void enable();

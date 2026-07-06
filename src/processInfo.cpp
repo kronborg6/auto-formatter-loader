@@ -161,6 +161,13 @@ bool match_name(const std::string& pid, const std::string& target) {
   return name == target;
 }
 
+bool match_name(const std::string& pid, const std::set<std::string>& target) {
+  std::ifstream f("/proc/" + pid + "/comm");
+  std::string name;
+  std::getline(f, name);
+  return target.contains(name);
+}
+
 void ProcessInfo::enable() {
   if (formatterTemplate_ == nullptr || isEnable_ || oldFormatter_.has_value())
     return;
