@@ -11,13 +11,13 @@ exludeFolders:
 
 formatters:
   - cpp:
-      formatter: ".clang-formatter"
+      formatter: ".clang-format"
       filetypes:
         - ".cpp"
         - ".hpp"
         - ".h"
   - c:
-      formatter: ".clang-formatter"
+      formatter: ".clang-format"
       filetypes:
         - ".c"
         - ".h"

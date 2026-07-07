@@ -67,8 +67,12 @@ int main(void) {
   //   progams.CreateNewFormatter(e, config, templates);
   // }
 
-  std::set<std::string> pids;
-  // std::set<std::string> pids = get_pids();
+  // std::set<std::string> pids;
+  std::set<std::string> pids = get_pids();
+  for (const std::string& pid : pids) {
+    if (!progams.enablePids.contains(pid))
+      progams.CreateNewFormatter(pid, config, templates);
+  }
   for (;;) {
     std::this_thread::sleep_for(std::chrono::seconds(3));
 
@@ -80,10 +84,11 @@ int main(void) {
     for (const std::string& pid : progams.enablePids) {
       if (!pids.contains(pid)) {
         // remove it
-        progams.formaters.erase(pid);
+        // progams.formaters.erase(pid);
       }
     }
-    pids = std::move(progams.enablePids);
+    std::cout << "formaters cout: " << std::to_string(sizeof(progams.enablePids)) << std::endl;
+    // pids = std::move(progams.enablePids);
   }
 
   for (const auto& x : progams.formaters | std::views::values) {

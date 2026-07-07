@@ -20,10 +20,10 @@ bool Programs::CreateNewFormatter(const std::filesystem::directory_entry& entry,
 
   if (match_name(pid, "nvim")) {
     auto cwd = std::filesystem::read_symlink("/proc/" + pid + "/cwd");
-    ProcessInfo process = ProcessInfo(pid, cwd.string(), config, templates);
+    ProcessInfo process(pid, cwd.string(), config, templates);
 
     if (!formaters.contains(cwd.string())) {
-      formaters.emplace(cwd.string(), process);
+      formaters.emplace(cwd.string(), std::move(process));
       process.enable();
     }
   }
@@ -36,16 +36,16 @@ bool Programs::CreateNewFormatter(const std::string& pid,
 
   if (match_name(pid, config.getIdes())) {
     auto cwd = std::filesystem::read_symlink("/proc/" + pid + "/cwd");
-    ProcessInfo process = ProcessInfo(pid, cwd.string(), config, templates);
 
     if (!formaters.contains(cwd.string())) {
-      formaters.emplace(cwd.string(), process);
-      process.enable();
-      if (process.getIsEnable()) {
+      ProcessInfo process(pid, cwd.string(), config, templates);
+      if (!process.getIsEnable()) {
+        process.enable();
         this->enablePids.insert(pid);
         std::cout << "enable formatter for pid: " << pid << " cwd: " << cwd.string() << std::endl;
+        formaters.emplace(cwd.string(), std::move(process));
       }
     }
   }
-  return false;
+  return true;
 }

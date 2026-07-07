@@ -20,7 +20,8 @@ namespace fs = std::filesystem;
 
 ProcessInfo::~ProcessInfo() {
 
-  if (isEnable_ && fs::is_symlink(this->path_ + "/" + this->formatterTemplate_->filename)) {
+  if (isEnable_ && !file_.empty() &&
+      fs::is_symlink(this->path_ + "/" + this->formatterTemplate_->filename)) {
 
     if (fs::remove(this->path_ + "/" + this->formatterTemplate_->filename)) {
       std::cout << "i remove the link"
@@ -85,13 +86,6 @@ ProcessInfo::ProcessInfo(std::string pid,
 
     std::string last = filename.substr(dotPos + 1);
 
-    // std::string filename = entry.path().filename().string().substr(
-    //     entry.path().filename().string().find_last_of("/") + 1);
-    //
-    // std::vector<std::string> splitString = split(filename, ".");
-    //
-    // std::string& last = splitString[splitString.size() - 1];
-
     if (last == "clang-format") {
       Formatter oldformater = Formatter{
           filename = ".clang-format",
@@ -134,7 +128,11 @@ ProcessInfo::ProcessInfo(std::string pid,
 
   // need to make a check her if la is null and make it so we don't crach if they is no formatter in
   // templates
-  formatterTemplate_ = &templates.getFormatter(la.formatter);
+  auto it = templates.getFormatter(la.formatter);
+  if (!it) {
+    return;
+  }
+  formatterTemplate_ = it;
 
   // switch (type_) {
   // case ProgramingLaunge::Cpp:
