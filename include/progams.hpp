@@ -19,4 +19,6 @@ struct Programs {
     bool CreateNewFormatter(const std::string& pid,
                             const option::Config& config,
                             const option::TemplateLoader& templates);
+
+    void removeFormatterViaPid(const std::string& pid);
 };

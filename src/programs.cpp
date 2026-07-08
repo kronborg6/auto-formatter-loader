@@ -45,6 +45,10 @@ bool Programs::CreateNewFormatter(const std::string& pid,
         std::cout << "enable formatter for pid: " << pid << " cwd: " << cwd.string() << std::endl;
         formaters.emplace(cwd.string(), std::move(process));
       }
+    } else {
+      ProcessInfo& process = this->formaters.at(cwd.string());
+      process.insert(pid);
+      this->enablePids.insert(pid);
     }
   }
   return true;

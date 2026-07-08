@@ -24,8 +24,7 @@ ProcessInfo::~ProcessInfo() {
       fs::is_symlink(this->path_ + "/" + this->formatterTemplate_->filename)) {
 
     if (fs::remove(this->path_ + "/" + this->formatterTemplate_->filename)) {
-      std::cout << "i remove the link"
-                << "\n";
+      std::cout << "i remove the link for PID: " << *pids_.begin() << "\n";
     } else {
 
       std::cout << "failed to remove the link"
@@ -43,7 +42,7 @@ ProcessInfo::ProcessInfo(std::string pid,
   if (path.empty())
     throw std::invalid_argument("path cannot be emty");
 
-  pid_ = pid;
+  pids_.insert(pid);
   path_ = path;
 
   // const std::unordered_set<std::string> folders_to_skip =
@@ -101,12 +100,12 @@ ProcessInfo::ProcessInfo(std::string pid,
     if (all.contains(last)) {
       typeCount[last]++;
     }
-    std::cout << entry.path() << '\n';
+    // std::cout << entry.path() << '\n';
   }
 
-  for (const auto& [key, value] : typeCount) {
-    std::cout << key << ": " << value << "\n";
-  }
+  // for (const auto& [key, value] : typeCount) {
+  //   std::cout << key << ": " << value << "\n";
+  // }
 
   if (typeCount.empty()) {
     std::cout << "no matchs PID: " << pid << std::endl;
@@ -173,6 +172,7 @@ void ProcessInfo::enable() {
   if (!fs::exists(this->path_ + "/" + this->formatterTemplate_->filename)) {
     fs::create_symlink(formatterTemplate_->filePath,
                        this->path_ + "/" + this->formatterTemplate_->filename);
+    file_ = this->formatterTemplate_->filename;
     std::cout << "created system link\n";
     isEnable_ = true;
   }

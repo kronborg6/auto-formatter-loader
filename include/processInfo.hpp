@@ -5,8 +5,12 @@
 #include "formatters/formatter.hpp"
 #include "formatters/templateLoader.hpp"
 #include "project_type.hpp"
+#include <algorithm>
+#include <iterator>
 #include <memory>
 #include <optional>
+#include <ostream>
+#include <sstream>
 #include <string>
 #include <unordered_map>
 
@@ -21,7 +25,15 @@ class ProcessInfo {
                 std::string path,
                 const option::Config& config,
                 const option::TemplateLoader& templates);
-    // ProcessInfo(ProcessInfo&&) = default;
+    ProcessInfo(ProcessInfo&& other) noexcept
+        : pids_(std::move(other.pids_)), path_(std::move(other.path_)),
+          file_(std::move(other.file_)), formatter_(std::move(other.formatter_)),
+          formatterTemplate_(std::move(other.formatterTemplate_)),
+          oldFormatter_(std::move(other.oldFormatter_)), isEnable_(other.isEnable_),
+          type_(std::move(other.type_)) {
+      other.isEnable_ = false;
+    }
+
     // ProcessInfo(const ProcessInfo&) = default;
     // ProcessInfo& operator=(ProcessInfo&&) = default;
     // ProcessInfo& operator=(const ProcessInfo&) = default;
@@ -35,12 +47,27 @@ class ProcessInfo {
     bool createFormater();
     bool createFormater(std::string formaterPath);
 
-    std::string getPid() const {
-      return pid_;
+    std::set<std::string> getPids() const {
+      return pids_;
+    }
+
+    std::string print() const {
+      std::ostringstream steam;
+      std::copy(pids_.begin(), pids_.end(), std::ostream_iterator<std::string>(steam, ", "));
+      return steam.str();
     }
 
     std::string getPath() const {
       return path_;
+    }
+    bool containPid(const std::string& pid) const {
+      if (pids_.contains(pid))
+        return true;
+      return false;
+    }
+
+    void insert(std::string pid) {
+      pids_.insert(pid);
     }
 
     bool getIsEnable() const {
@@ -50,7 +77,7 @@ class ProcessInfo {
     void enable();
 
   private:
-    std::string pid_;
+    std::set<std::string> pids_;
     std::string path_;
     std::string file_;
 
