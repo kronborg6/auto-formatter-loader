@@ -53,7 +53,6 @@ int main(void) {
   // then load the templates check for args to change dir
   const option::TemplateLoader templates = option::TemplateLoader();
 
-  // std::set<std::string> pids;
   std::set<std::string> pids = get_pids();
   for (const std::string& pid : pids) {
     if (!progams.enablePids.contains(pid))
@@ -67,13 +66,14 @@ int main(void) {
       if (!progams.enablePids.contains(pid))
         progams.CreateNewFormatter(pid, config, templates);
     }
+
+    // TODO: change this to get the cwd in side the first if and use that to make a list of the once
+    // that need to get removed
     for (const std::string& pid : progams.enablePids) {
       if (!new_pids.contains(pid)) {
         // remove it
         if (progams.removeFormatterViaPid(pid))
           break;
-
-        // progams.formaters.erase(pid);
       }
     }
     if (count != progams.formaters.size()) {
