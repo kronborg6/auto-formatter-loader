@@ -6,6 +6,7 @@
 #include <filesystem>
 #include <iostream>
 #include <string>
+#include <vector>
 
 bool Programs::CreateNewFormatter(const std::filesystem::directory_entry& entry,
                                   const option::Config& config,
@@ -52,4 +53,17 @@ bool Programs::CreateNewFormatter(const std::string& pid,
     }
   }
   return true;
+}
+bool Programs::removeFormatterViaPid(const std::string& pid) {
+  for (auto& [key, value] : this->formaters) {
+    if (value.containPid(pid)) {
+      std::set<std::string> active_pids = value.getPids();
+      this->formaters.erase(key);
+      std::erase_if(this->enablePids,
+                    [&](const std::string& x) { return active_pids.contains(x); });
+
+      return true;
+    }
+  }
+  return false;
 }

@@ -81,11 +81,13 @@ int main(void) {
       if (!progams.enablePids.contains(pid))
         progams.CreateNewFormatter(pid, config, templates);
     }
-    // for (const std::string& pid : progams.enablePids) {
-    for (const std::string& pid : pids) {
-      if (!progams.enablePids.contains(pid)) {
+    for (const std::string& pid : progams.enablePids) {
+      if (!new_pids.contains(pid)) {
         // remove it
-        progams.formaters.erase(pid);
+        if (progams.removeFormatterViaPid(pid))
+          break;
+
+        // progams.formaters.erase(pid);
       }
     }
     std::cout << "formaters cout: " << std::to_string(sizeof(progams.enablePids)) << std::endl;

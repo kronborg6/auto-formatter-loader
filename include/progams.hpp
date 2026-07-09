@@ -20,5 +20,5 @@ struct Programs {
                             const option::Config& config,
                             const option::TemplateLoader& templates);
 
-    void removeFormatterViaPid(const std::string& pid);
+    bool removeFormatterViaPid(const std::string& pid);
 };
