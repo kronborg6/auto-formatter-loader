@@ -21,20 +21,29 @@ becus i don't wan't to force my format onto any one
 
 
 
-## Config and Template
+## Config and Templates
 
-the config standard path is in the home folder with the name .auto-formatter.yaml
-the standard path for the Template folder is ~/.dotfile/auto-formatter/templates
+By default, `auto-formatter` looks for the config file here:
 
+```sh
+~/.auto-formatter.yaml
+```
 
-## How to run
+The default template folder is:
 
-to run this you need a 
-`~/.auto-formatter.yaml`
-`~/.config/autoFormatter/templates`
+```sh
+~/.config/autoFormatter/templates
+```
+
+## Required Files
+
+To run `auto-formatter`, you need:
+
+- A config file at `~/.auto-formatter.yaml`
+- A template folder at `~/.config/autoFormatter/templates`
 
 <details>
-<summary><code>auto-formatter.yaml</code></summary>
+<summary><code>~/.auto-formatter.yaml</code></summary>
 
 ```yaml
 IDE:
@@ -77,10 +86,10 @@ formatters:
 </details>
 
 <details>
-<summary><code>autoFormatter Folder Layout</code></summary>
+<summary><code>Template folder layout</code></summary>
 
 ```text
-autoFormatter/
+~/.config/autoFormatter/
 └── templates/
     ├── .clang-format
     ├── .rustfmt.toml
@@ -90,14 +99,44 @@ autoFormatter/
 
 </details>
 
+## Running
+
+Run normally:
+
 ```sh
 ./auto-formatter
 ```
 
+Run in the background:
 
+```sh
+./auto-formatter > auto-formatter.log 2>&1 &
+```
 
-## Build from source (Recommend)
+This starts `auto-formatter` in the background and writes output to `auto-formatter.log`.
+
+To see background jobs in the current shell:
+
+```sh
+jobs
+```
+
+To bring the program back to the foreground:
+
+```sh
+fg
+```
+
+## Build from Source
+
 ```sh
 cmake -S . -B build
+cmake --build build
+```
+
+For a release build:
+
+```sh
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build
 ```
