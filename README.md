@@ -25,3 +25,79 @@ becus i don't wan't to force my format onto any one
 
 the config standard path is in the home folder with the name .auto-formatter.yaml
 the standard path for the Template folder is ~/.dotfile/auto-formatter/templates
+
+
+## How to run
+
+to run this you need a 
+`~/.auto-formatter.yaml`
+`~/.config/autoFormatter/templates`
+
+<details>
+<summary><code>auto-formatter.yaml</code></summary>
+
+```yaml
+IDE:
+  - "nvim"
+  - "code"
+
+depth: 2
+
+excludeFolders:
+  - ".git"
+  - "build"
+  - "target"
+
+formatters:
+  - cpp:
+      formatter: ".clang-format"
+      filetypes:
+        - ".cpp"
+        - ".hpp"
+        - ".h"
+  - c:
+      formatter: ".clang-format"
+      filetypes:
+        - ".c"
+        - ".h"
+  - rust:
+      formatter: ".rustfmt.toml"
+      filetypes:
+        - ".rs"
+  - odin:
+      formatter: "odinfmt.json"
+      filetypes:
+        - ".odin"
+  - csharp:
+      formatter: ".editorconfig"
+      filetypes:
+        - ".cs"
+```
+
+</details>
+
+<details>
+<summary><code>autoFormatter Folder Layout</code></summary>
+
+```text
+autoFormatter/
+└── templates/
+    ├── .clang-format
+    ├── .rustfmt.toml
+    ├── odinfmt.json
+    └── .editorconfig
+```
+
+</details>
+
+```sh
+./auto-formatter
+```
+
+
+
+## Build from source (Recommend)
+```sh
+cmake -S . -B build
+cmake --build build
+```

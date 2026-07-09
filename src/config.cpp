@@ -69,8 +69,8 @@ namespace option {
       maxDepth_ = node["depth"].as<int>();
     }
 
-    if (node["exludeFolders"]) {
-      excludeFolders_ = node["exludeFolders"].as<std::vector<std::string>>();
+    if (node["excludeFolders"]) {
+      excludeFolders_ = node["excludeFolders"].as<std::vector<std::string>>();
     }
   }
 
