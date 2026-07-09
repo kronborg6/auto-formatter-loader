@@ -5,6 +5,7 @@
 #include "yaml-cpp/node/parse.h"
 #include <cctype>
 #include <chrono>
+#include <cstddef>
 #include <filesystem>
 #include <ranges>
 #include <set>
@@ -42,6 +43,8 @@ std::set<std::string> get_pids() {
   return pids;
 }
 
+size_t count = 0;
+
 int main(void) {
   option::Config config = option::Config(YAML::LoadFile("/home/kronborg/.auto-formatter.yaml"));
 
@@ -73,7 +76,10 @@ int main(void) {
         // progams.formaters.erase(pid);
       }
     }
-    std::cout << "formaters cout: " << std::to_string(progams.formaters.size()) << std::endl;
+    if (count != progams.formaters.size()) {
+      count = progams.formaters.size();
+      std::cout << "formaters cout: " << count << std::endl;
+    }
     pids = progams.enablePids;
   }
 
