@@ -58,15 +58,6 @@ int main(void) {
   // then load the templates check for args to change dir
   const option::TemplateLoader templates = option::TemplateLoader();
 
-  // this is how we are gona check what ides that is runing need to get options
-  // from config
-  // auto temp = std::filesystem::directory_iterator("/proc");
-  // for (auto& e : std::filesystem::directory_iterator("/proc")) {
-  //   if (!is_pid_dir(e))
-  //     continue;
-  //   progams.CreateNewFormatter(e, config, templates);
-  // }
-
   // std::set<std::string> pids;
   std::set<std::string> pids = get_pids();
   for (const std::string& pid : pids) {
