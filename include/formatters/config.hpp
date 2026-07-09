@@ -3,6 +3,7 @@
 #include "language.hpp"
 #include "yaml-cpp/node/node.h"
 #include <filesystem>
+#include <optional>
 #include <string>
 #include <unordered_set>
 #include <vector>
@@ -26,7 +27,7 @@ namespace option {
           }
         }
       }
-      Language findLanugeByFileType(const std::string& name) const {
+      std::optional<Language> findLanugeByFileType(const std::string& name) const {
         for (const auto& lang : languge_) {
           for (const std::string& type : lang.filetypes) {
             if (type == name) {
@@ -34,6 +35,7 @@ namespace option {
             }
           }
         }
+        return std::nullopt;
       }
       Language findLanuge(const std::string& name) const {
         for (const auto& lang : languge_) {

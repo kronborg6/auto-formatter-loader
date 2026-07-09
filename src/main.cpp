@@ -2,15 +2,9 @@
 #include "formatters/templateLoader.hpp"
 #include "iostream"
 #include "progams.hpp"
-#include "watcherEvent.hpp"
-#include "yaml-cpp/node/node.h"
 #include "yaml-cpp/node/parse.h"
 #include <cctype>
-#include <cerrno>
 #include <chrono>
-#include <cstdio>
-#include <cstdlib>
-#include <cstring>
 #include <filesystem>
 #include <ranges>
 #include <set>
@@ -19,8 +13,6 @@
 #include <sys/poll.h>
 #include <thread>
 #include <unistd.h>
-#include <utility>
-#include <vector>
 #include <yaml-cpp/yaml.h>
 
 bool is_pid_dir(const std::filesystem::directory_entry& entry) {
@@ -81,15 +73,12 @@ int main(void) {
         // progams.formaters.erase(pid);
       }
     }
-    std::cout << "formaters cout: " << std::to_string(sizeof(progams.enablePids)) << std::endl;
+    std::cout << "formaters cout: " << std::to_string(progams.formaters.size()) << std::endl;
     pids = progams.enablePids;
   }
 
   for (const auto& x : progams.formaters | std::views::values) {
-
     std::cout << "pid: " << x.print() << "CWD: " << x.getPath() << std::endl;
-
-    // std::println("pid: {}, CWD: {}", x.getPid(), x.getPath());
   }
   return 0;
 }

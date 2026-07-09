@@ -3,19 +3,17 @@
 #include "formatters/formatter.hpp"
 #include "formatters/templateLoader.hpp"
 #include "language.hpp"
-#include "project_type.hpp"
-#include "stringHelper.hpp"
 #include <algorithm>
 #include <cstdio>
 #include <filesystem>
 #include <fstream>
 #include <iostream>
-#include <memory>
+#include <optional>
 #include <stdexcept>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
-#include <vector>
+
 namespace fs = std::filesystem;
 
 ProcessInfo::~ProcessInfo() {
@@ -24,11 +22,10 @@ ProcessInfo::~ProcessInfo() {
       fs::is_symlink(this->path_ + "/" + this->formatterTemplate_->filename)) {
 
     if (fs::remove(this->path_ + "/" + this->formatterTemplate_->filename)) {
-      std::cout << "i remove the link for PID: " << *pids_.begin() << "\n";
+      std::cout << "removed formatter for PID: " << this->print() << "\n";
     } else {
 
-      std::cout << "failed to remove the link"
-                << "\n";
+      std::cout << "failed to remove the link for PID: " << this->print() << "\n";
     }
   }
 }
@@ -123,11 +120,13 @@ ProcessInfo::ProcessInfo(std::string pid,
     return;
   }
 
-  Language la = config.findLanugeByFileType(type_);
+  std::optional<Language> la = config.findLanugeByFileType(type_);
 
+  if (!la)
+    return;
   // need to make a check her if la is null and make it so we don't crach if they is no formatter in
   // templates
-  auto it = templates.getFormatter(la.formatter);
+  auto it = templates.getFormatter(la.value().formatter);
   if (!it) {
     return;
   }
@@ -178,12 +177,6 @@ void ProcessInfo::enable() {
   }
 }
 
-bool ProcessInfo::createFormater(std::string formaterPath) {
-  if (this->formater_)
-    return true;
-  return true;
-}
-
 bool ProcessInfo::createFormater() {
   if (this->formater_)
     return true;
@@ -194,7 +187,7 @@ bool ProcessInfo::deletFormater() {
   if (this->formater_) {
     std::string filePath = this->path_ + "" + this->file_;
     std::remove(filePath.c_str());
-  } else {
-    return false;
+    return true;
   }
+  return false;
 }

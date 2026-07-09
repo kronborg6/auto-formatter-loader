@@ -1,18 +1,13 @@
 #pragma once
 
-#include "filesystem"
 #include "formatters/config.hpp"
 #include "formatters/formatter.hpp"
 #include "formatters/templateLoader.hpp"
-#include "project_type.hpp"
 #include <algorithm>
 #include <iterator>
-#include <memory>
 #include <optional>
-#include <ostream>
 #include <sstream>
 #include <string>
-#include <unordered_map>
 
 bool match_name(const std::string& pid, const std::string& target);
 bool match_name(const std::string& pid, const std::set<std::string>& target);
@@ -51,7 +46,7 @@ class ProcessInfo {
       return pids_;
     }
 
-    std::string print() const {
+    const std::string print() const {
       std::ostringstream steam;
       std::copy(pids_.begin(), pids_.end(), std::ostream_iterator<std::string>(steam, ", "));
       return steam.str();

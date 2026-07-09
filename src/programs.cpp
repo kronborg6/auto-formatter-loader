@@ -6,7 +6,6 @@
 #include <filesystem>
 #include <iostream>
 #include <string>
-#include <vector>
 
 bool Programs::CreateNewFormatter(const std::filesystem::directory_entry& entry,
                                   const option::Config& config,
