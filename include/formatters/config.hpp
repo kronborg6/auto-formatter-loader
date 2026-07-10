@@ -62,7 +62,7 @@ namespace option {
       std::vector<Language> languge_;
       std::set<std::string> ides_;
       std::vector<std::string> excludeFolders_ = {".git", "build"};
-      int maxDepth_ = 4;
+      int maxDepth_ = 3;
 
       void LoadFromNode(const YAML::Node& node);
   };

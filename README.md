@@ -1,23 +1,12 @@
-# formant setup
+# Formatter Setup
 
-### what is this for
+## What is this for?
 
-this project is for me MUHAHAHA
-im not sure if it a good idea to make this in C++
+This project was made because I got tired of copying formatter config files into every new project, or manually adding formatter setup to my editor each time.
 
-but her it goes
+The idea is simple: run `auto-formatter` in the background, and when you open a supported project, it links the correct formatter config into the project root.
 
-i just hate setting up new project
-at the moment im learning cmake and cpp
-so im not gona make a script or somfing for that
-
-but what i hate even more is when the formant scuks
-so my idea is
-to make a project that ehiter get run with nvim or somfig so i make a alias or somfig that runs this project and start neovim up
-or se if i can make it run in the backgound and get wait for a IDE to start
-then i wan't it to check if they is a .clang-format if it a c++ project if not create one
-maby im not sure about this but when i queit the ide maby delete the formanter or i need to add it to .gitignore
-becus i don't wan't to force my format onto any one
+That means your formatter is enabled automatically without needing to copy config files manually. When the project is closed or refreshed, the linked formatter config is cleaned up again.
 
 
 
@@ -50,8 +39,10 @@ IDE:
   - "nvim"
   - "code"
 
+# Optional. Default: 2
 depth: 2
 
+# Optional. Default: [".git", "build", "target"]
 excludeFolders:
   - ".git"
   - "build"
@@ -81,6 +72,25 @@ formatters:
       formatter: ".editorconfig"
       filetypes:
         - ".cs"
+```
+
+</details>
+
+<details>
+<summary><code>Minimal config</code></summary>
+
+```yaml
+IDE:
+  - "nvim"
+  - "code"
+
+formatters:
+  - cpp:
+      formatter: ".clang-format"
+      filetypes:
+        - ".cpp"
+        - ".hpp"
+        - ".h"
 ```
 
 </details>
@@ -127,6 +137,12 @@ To bring the program back to the foreground:
 fg
 ```
 
+To stop the background process:
+
+```sh
+kill %1
+```
+
 ## Build from Source
 
 ```sh
@@ -134,9 +150,17 @@ cmake -S . -B build
 cmake --build build
 ```
 
-For a release build:
+For an optimized release build:
 
 ```sh
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build
 ```
+<details>
+<summary><code>About this README</code></summary>
+
+I used ChatGPT to help write and clean up parts of this README, since I am dyslexic and English is not my first language.
+
+The project and code are still my own work.
+
+</details>
