@@ -2,8 +2,16 @@ IDE:
   - "nvim"
   - "code"
 
-depth: 2
+# Optional. Default: true
+overrideFormatter: true
 
+# Optional. Default: true
+addToGitIgnore: true
+
+# Optional. Default: 3
+depth: 3
+
+# Optional. Default: [".git", "build", "target"]
 exludeFolders:
   - ".git"
   - "build"

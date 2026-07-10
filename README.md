@@ -39,8 +39,14 @@ IDE:
   - "nvim"
   - "code"
 
-# Optional. Default: 2
-depth: 2
+# Optional. Default: true
+overrideFormatter: true
+
+# Optional. Default: true
+addToGitIgnore: true
+
+# Optional. Default: 3
+depth: 3
 
 # Optional. Default: [".git", "build", "target"]
 excludeFolders:
@@ -158,6 +164,8 @@ cmake --build build
 ```
 <details>
 <summary><code>About this README</code></summary>
+
+
 
 I used ChatGPT to help write and clean up parts of this README, since I am dyslexic and English is not my first language.
 

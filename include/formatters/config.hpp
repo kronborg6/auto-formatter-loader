@@ -63,6 +63,8 @@ namespace option {
       std::set<std::string> ides_;
       std::vector<std::string> excludeFolders_ = {".git", "build"};
       int maxDepth_ = 3;
+      bool overrideFormatter_ = true;
+      bool addToGitIgnore_ = true;
 
       void LoadFromNode(const YAML::Node& node);
   };

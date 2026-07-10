@@ -72,6 +72,14 @@ namespace option {
     if (node["excludeFolders"]) {
       excludeFolders_ = node["excludeFolders"].as<std::vector<std::string>>();
     }
+
+    if (node["overrideFormatter"]) {
+      overrideFormatter_ = node["overrideFormatter"].as<bool>();
+    }
+
+    if (node["addToGitIgnore"]) {
+      addToGitIgnore_ = node["addToGitIgnore"].as<bool>();
+    }
   }
 
 } // namespace option
