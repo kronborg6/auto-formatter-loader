@@ -3,6 +3,7 @@
 #include "formatters/config.hpp"
 #include "formatters/formatter.hpp"
 #include "formatters/templateLoader.hpp"
+#include "gitignore.hpp"
 #include <algorithm>
 #include <iterator>
 #include <optional>
@@ -79,6 +80,7 @@ class ProcessInfo {
     Formatter formatter_;
     const Formatter* formatterTemplate_ = nullptr;
     std::optional<Formatter> oldFormatter_;
+    std::optional<Gitignore> gitingore_;
 
     bool formater_ = false;
     bool isEnable_ = false;

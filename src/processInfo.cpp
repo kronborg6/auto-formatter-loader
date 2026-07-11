@@ -74,6 +74,13 @@ ProcessInfo::ProcessInfo(std::string pid,
     }
     std::string filename = entry.path().filename().string();
 
+    if (filename == ".gitignore" && config.getAddToGitignore()) {
+      this->gitingore_ = Gitignore{
+          .path = entry.path(),
+          .text = "",
+      };
+    }
+
     std::size_t dotPos = filename.find_last_of('.');
 
     if (dotPos == std::string::npos) {
