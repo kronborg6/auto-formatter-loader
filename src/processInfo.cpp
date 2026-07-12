@@ -23,6 +23,7 @@ ProcessInfo::~ProcessInfo() {
 
     if (fs::remove(this->path_ + "/" + this->formatterTemplate_->filename)) {
       std::cout << "removed formatter for PID: " << this->print() << "\n";
+      this->gitingore_->removeFromGitignore();
     } else {
 
       std::cout << "failed to remove the link for PID: " << this->print() << "\n";
@@ -74,11 +75,12 @@ ProcessInfo::ProcessInfo(std::string pid,
     }
     std::string filename = entry.path().filename().string();
 
-    if (filename == ".gitignore" && config.getAddToGitignore()) {
-      this->gitingore_ = Gitignore{
+    if (filename == ".gitignore" && !this->gitingore_.has_value() && config.getAddToGitignore()) {
+      this->gitingore_.emplace(Gitignore{
           .path = entry.path(),
+          .init = false,
           .text = "",
-      };
+      });
     }
 
     std::size_t dotPos = filename.find_last_of('.');
@@ -180,6 +182,9 @@ void ProcessInfo::enable() {
                        this->path_ + "/" + this->formatterTemplate_->filename);
     file_ = this->formatterTemplate_->filename;
     std::cout << "created system link\n";
+    if (this->gitingore_.has_value()) {
+      this->gitingore_->addToGitignore(formatterTemplate_->filename);
+    }
     isEnable_ = true;
   }
 }

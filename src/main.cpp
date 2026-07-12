@@ -67,8 +67,8 @@ int main(void) {
         progams.CreateNewFormatter(pid, config, templates);
     }
 
-    // TODO: change this to get the cwd in side the first if and use that to make a list of the once
-    // that need to get removed
+    // TODO: need to change this to get a list of the cwd insted then loop over the once that need
+    // to get removed so we don't need to break after removeing
     for (const std::string& pid : progams.enablePids) {
       if (!new_pids.contains(pid)) {
         // remove it

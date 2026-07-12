@@ -21,6 +21,7 @@ class ProcessInfo {
                 std::string path,
                 const option::Config& config,
                 const option::TemplateLoader& templates);
+
     ProcessInfo(ProcessInfo&& other) noexcept
         : pids_(std::move(other.pids_)), path_(std::move(other.path_)),
           file_(std::move(other.file_)), formatter_(std::move(other.formatter_)),
@@ -30,13 +31,6 @@ class ProcessInfo {
       other.isEnable_ = false;
     }
 
-    // ProcessInfo(const ProcessInfo&) = default;
-    // ProcessInfo& operator=(ProcessInfo&&) = default;
-    // ProcessInfo& operator=(const ProcessInfo&) = default;
-    //
-    // need to change this from defualt to a function that clean op the systemlink, restore if a old
-    // formater existen and undo if we make change to .gitignore
-    // ~ProcessInfo() = default;
     ~ProcessInfo();
 
     bool deletFormater();

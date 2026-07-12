@@ -19,6 +19,7 @@ add_executable(${PROJECT_NAME}
     src/templateLoader.cpp
     src/config.cpp
     src/language.cpp
+    src/gitignore.cpp
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE
@@ -63,4 +64,26 @@ target_compile_options(${PROJECT_NAME} PRIVATE
         $<$<CONFIG:Debug>:-O0>
         $<$<CONFIG:Debug>:-fno-omit-frame-pointer>
 )
+# ----------------------------
+# CPack packaging
+# ----------------------------
 
+set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
+set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
+set(CPACK_PACKAGE_VENDOR "Kronborg")
+set(CPACK_PACKAGE_CONTACT "kronborgcode@gmail.com")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "C++ project setup tool")
+
+set(CPACK_PACKAGE_FILE_NAME
+    "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}"
+)
+
+# For .deb packages
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Kronborg")
+set(CPACK_DEBIAN_PACKAGE_SECTION "utils")
+set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
+
+# Let CPack detect shared library dependencies for .deb
+set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
+
+include(CPack)
