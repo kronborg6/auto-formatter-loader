@@ -192,7 +192,6 @@ void ProcessInfo::enable() {
     std::cout << "created system link\n";
     if (this->gitingore_.has_value()) {
       this->gitingore_->addToGitignore(formatterTemplate_->filename);
-      this->gitingore_->init = true;
     }
     isEnable_ = true;
   }
