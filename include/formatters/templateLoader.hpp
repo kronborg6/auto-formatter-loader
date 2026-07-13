@@ -23,6 +23,10 @@ namespace option {
         return nullptr;
       }
 
+      const std::unordered_map<std::string, Formatter> GetFormatters() const {
+        return formatters_;
+      }
+
     private:
       std::string path_;
       std::unordered_map<std::string, Formatter> formatters_;

@@ -1,4 +1,5 @@
 #include "processInfo.hpp"
+#include "fileFinder.hpp"
 #include "formatters/config.hpp"
 #include "formatters/formatter.hpp"
 #include "formatters/templateLoader.hpp"
@@ -100,10 +101,12 @@ ProcessInfo::ProcessInfo(std::string pid,
 
     std::string last = filename.substr(dotPos + 1);
 
-    if (last == "clang-format") {
-      Formatter oldformater = Formatter{
-          filename = ".clang-format",
-          filepath = entry.path().filename(),
+    std::optional<Formatter> temp = FindMatch(filename, templates.GetFormatters());
+
+    if (temp.has_value()) {
+      Formatter oldformater{
+          .filename = temp.value().filename,
+          .filePath = entry.path(),
       };
       oldFormatter_ = oldformater;
     }
@@ -145,17 +148,6 @@ ProcessInfo::ProcessInfo(std::string pid,
   }
   formatterTemplate_ = it;
 
-  // switch (type_) {
-  // case ProgramingLaunge::Cpp:
-  //   formatterTemplate_ = &formatters.getFormatter(".clang-format");
-  //   break;
-  // case ProgramingLaunge::C:
-  //   break;
-  // case ProgramingLaunge::Zig:
-  //   break;
-  // case ProgramingLaunge::Rust:
-  //   break;
-  // }
   // need to check what kid of project it is
   // after check if it contains a formater
   // if it does copy path and file name then change it to fx filename.temp
