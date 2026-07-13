@@ -5,6 +5,7 @@
 #include "formatters/templateLoader.hpp"
 #include "gitignore.hpp"
 #include <algorithm>
+#include <filesystem>
 #include <iterator>
 #include <optional>
 #include <sstream>
@@ -36,6 +37,10 @@ class ProcessInfo {
     bool deletFormater();
     bool createFormater();
     bool createFormater(std::string formaterPath);
+
+    template <typename Container>
+    std::optional<fs::directory_entry> FindMatch(const fs::path& path,
+                                                 const Container& targets) const;
 
     std::set<std::string> getPids() const {
       return pids_;

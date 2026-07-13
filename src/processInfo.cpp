@@ -14,6 +14,7 @@
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
+#include <vector>
 
 namespace fs = std::filesystem;
 
@@ -114,12 +115,7 @@ ProcessInfo::ProcessInfo(std::string pid,
     if (all.contains(last)) {
       typeCount[last]++;
     }
-    // std::cout << entry.path() << '\n';
   }
-
-  // for (const auto& [key, value] : typeCount) {
-  //   std::cout << key << ": " << value << "\n";
-  // }
 
   if (typeCount.empty()) {
     std::cout << "no matchs PID: " << pid << std::endl;
@@ -210,4 +206,17 @@ bool ProcessInfo::deletFormater() {
     return true;
   }
   return false;
+}
+
+template <typename Container>
+std::optional<fs::directory_entry> ProcessInfo::FindMatch(const fs::path& path,
+                                                          const Container& targets) const {
+  for (const auto& entry : fs::directory_iterator(path)) {
+    const auto filename = entry.path().filename().string();
+
+    if (std::find(targets.begin(), targets.end(), filename) != targets.end()) {
+      return entry;
+    }
+  }
+  return std::nullopt;
 }
