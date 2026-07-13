@@ -20,6 +20,7 @@ add_executable(${PROJECT_NAME}
     src/config.cpp
     src/language.cpp
     src/gitignore.cpp
+    src/fileFinder.cpp
 )
 
 target_compile_definitions(${PROJECT_NAME} PRIVATE
