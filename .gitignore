@@ -1,6 +1,5 @@
-.clang-format
 build/
-
 build
-
 ideas/
+.idea
+.idea/

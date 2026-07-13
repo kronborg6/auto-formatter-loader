@@ -39,8 +39,14 @@ bool Programs::CreateNewFormatter(const std::string& pid,
 
     if (!formaters.contains(cwd.string())) {
       ProcessInfo process(pid, cwd.string(), config, templates);
+      std::cerr << "process address=" << &process << " gitignore=" << process.hasGitignore()
+                << '\n';
       if (!process.getIsEnable()) {
+        std::cerr << "p212312rocess address=" << &process << " gitignore=" << process.hasGitignore()
+                  << '\n';
         process.enable();
+        std::cerr << "123123123 address=" << &process << " gitignore=" << process.hasGitignore()
+                  << '\n';
         this->enablePids.insert(pid);
         std::cout << "enable formatter for pid: " << pid << " cwd: " << cwd.string() << std::endl;
         formaters.emplace(cwd.string(), std::move(process));

@@ -26,8 +26,8 @@ class ProcessInfo {
         : pids_(std::move(other.pids_)), path_(std::move(other.path_)),
           file_(std::move(other.file_)), formatter_(std::move(other.formatter_)),
           formatterTemplate_(std::move(other.formatterTemplate_)),
-          oldFormatter_(std::move(other.oldFormatter_)), isEnable_(other.isEnable_),
-          type_(std::move(other.type_)) {
+          oldFormatter_(std::move(other.oldFormatter_)), gitingore_(std::move(other.gitingore_)),
+          isEnable_(other.isEnable_), type_(std::move(other.type_)) {
       other.isEnable_ = false;
     }
 
@@ -39,6 +39,10 @@ class ProcessInfo {
 
     std::set<std::string> getPids() const {
       return pids_;
+    }
+
+    bool hasGitignore() const {
+      return gitingore_.has_value();
     }
 
     const std::string print() const {

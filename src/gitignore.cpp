@@ -1,13 +1,15 @@
 #include "gitignore.hpp"
 #include <cstddef>
+#include <filesystem>
 #include <fstream>
 #include <ios>
 #include <string>
 
 bool Gitignore::removeFromGitignore() {
   if (this->init) {
-    const std::string filename = ".gitignore";
-    const std::string tempFile = ".gitignore.tmp";
+    const std::string filename = this->path;
+    std::filesystem::path tempFile = this->path;
+    tempFile += ".temp";
 
     std::ifstream input(filename);
     std::ofstream output(tempFile);

@@ -4,6 +4,7 @@
 #include "formatters/templateLoader.hpp"
 #include "language.hpp"
 #include <algorithm>
+#include <cassert>
 #include <cstdio>
 #include <filesystem>
 #include <fstream>
@@ -22,8 +23,12 @@ ProcessInfo::~ProcessInfo() {
       fs::is_symlink(this->path_ + "/" + this->formatterTemplate_->filename)) {
 
     if (fs::remove(this->path_ + "/" + this->formatterTemplate_->filename)) {
+
       std::cout << "removed formatter for PID: " << this->print() << "\n";
-      this->gitingore_->removeFromGitignore();
+
+      if (this->gitingore_.has_value())
+        this->gitingore_->removeFromGitignore();
+
     } else {
 
       std::cout << "failed to remove the link for PID: " << this->print() << "\n";
@@ -75,12 +80,15 @@ ProcessInfo::ProcessInfo(std::string pid,
     }
     std::string filename = entry.path().filename().string();
 
-    if (filename == ".gitignore" && !this->gitingore_.has_value() && config.getAddToGitignore()) {
+    if (filename == ".gitignore" && !this->gitingore_ && config.getAddToGitignore()) {
       this->gitingore_.emplace(Gitignore{
           .path = entry.path(),
           .init = false,
           .text = "",
       });
+
+      std::cerr << "using this=" << this << " has_value=" << this->gitingore_.has_value() << '\n';
+      assert(this->gitingore_.has_value());
     }
 
     std::size_t dotPos = filename.find_last_of('.');
@@ -184,6 +192,7 @@ void ProcessInfo::enable() {
     std::cout << "created system link\n";
     if (this->gitingore_.has_value()) {
       this->gitingore_->addToGitignore(formatterTemplate_->filename);
+      this->gitingore_->init = true;
     }
     isEnable_ = true;
   }
