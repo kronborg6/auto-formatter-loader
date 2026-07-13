@@ -207,16 +207,3 @@ bool ProcessInfo::deletFormater() {
   }
   return false;
 }
-
-template <typename Container>
-std::optional<fs::directory_entry> ProcessInfo::FindMatch(const fs::path& path,
-                                                          const Container& targets) const {
-  for (const auto& entry : fs::directory_iterator(path)) {
-    const auto filename = entry.path().filename().string();
-
-    if (std::find(targets.begin(), targets.end(), filename) != targets.end()) {
-      return entry;
-    }
-  }
-  return std::nullopt;
-}

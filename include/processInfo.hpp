@@ -38,10 +38,6 @@ class ProcessInfo {
     bool createFormater();
     bool createFormater(std::string formaterPath);
 
-    template <typename Container>
-    std::optional<fs::directory_entry> FindMatch(const fs::path& path,
-                                                 const Container& targets) const;
-
     std::set<std::string> getPids() const {
       return pids_;
     }
