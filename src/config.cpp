@@ -7,22 +7,25 @@
 #include <set>
 #include <stdexcept>
 #include <string>
+#include <string_view>
 #include <vector>
 
 namespace fs = std::filesystem;
 
 namespace option {
-  Config::Config() {
-    const char* home = std::getenv("HOME");
-    if (!home)
-      throw std::invalid_argument("");
 
-    fs::path path = fs::path(home) / ".auto-formatter.yaml";
+  Config::Config() {
+    std::optional<fs::path> home = getHomePath();
+    if (!home.has_value())
+      throw std::invalid_argument("missing home path");
+
+    fs::path path = home.value() / ".auto-formatter.yaml";
 
     if (!fs::exists(path))
       throw std::invalid_argument("failed to find config (.auto-formatter.yaml) at: " +
                                   path.string());
 
+    // logsPath_ = fs::path(home) / "autoFormatter/logs";
     Config::LoadFromNode(YAML::LoadFile(path));
   }
   Config::Config(fs::path path) {
@@ -80,6 +83,26 @@ namespace option {
     if (node["addToGitIgnore"]) {
       addToGitIgnore_ = node["addToGitIgnore"].as<bool>();
     }
+
+    if (node["logPath"]) {
+      std::string_view path = node["addToGitIgnore"].as<std::string_view>();
+      logsPath_ = fs::path(path);
+    } else {
+      auto home = getHomePath();
+      if (!home.has_value()) {
+        throw std::invalid_argument("missing home path");
+      }
+      logsPath_ = home.value() / ".config/autoFormatter/logs";
+    }
   }
 
+  const std::optional<fs::path> getHomePath() {
+    const char* home = std::getenv("HOME");
+
+    if (!home) {
+      return std::nullopt;
+    }
+
+    return fs::path(home);
+  }
 } // namespace option
