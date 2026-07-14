@@ -6,6 +6,8 @@
 
 namespace {
   std::ostream& getLogOutput() {
+    // need to change this so i can put where i wan't to store the logs and maby give the user
+    // option to change it to
 #ifdef NDEBUG
     static std::ofstream file{"app.log", std::ios::app};
 
