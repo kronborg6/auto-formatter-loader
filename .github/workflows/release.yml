@@ -15,6 +15,9 @@ jobs:
   release:
     runs-on: ubuntu-latest
 
+    outputs:
+      hashes: ${{ steps.hash.outputs.hashes }}
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -24,15 +27,13 @@ jobs:
         with:
           cmakeVersion: "~4.2.0"
 
-      - name: Show CMake version
-        run: cmake --version
-
       - name: Configure CMake
         run: >
           cmake
           -S "${{ github.workspace }}"
           -B "${{ github.workspace }}/build"
           -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+          -DCMAKE_POLICY_VERSION_MINIMUM=3.5
 
       - name: Build
         run: >
@@ -48,10 +49,32 @@ jobs:
         working-directory: ${{ github.workspace }}/build
         run: cpack -C "${{ env.BUILD_TYPE }}"
 
+      - name: Generate package hashes
+        id: hash
+        shell: bash
+        run: |
+          echo "hashes=$(sha256sum build/*.tar.gz build/*.zip build/*.deb | base64 -w0)" >> "$GITHUB_OUTPUT"
+
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
         with:
+          fail_on_unmatched_files: true
           files: |
             build/*.tar.gz
             build/*.zip
             build/*.deb
+
+  provenance:
+    needs:
+      - release
+
+    permissions:
+      actions: read
+      id-token: write
+      contents: write
+
+    uses: slsa-framework/slsa-github-generator/.github/workflows/generator_generic_slsa3.yml@v2.1.0
+
+    with:
+      base64-subjects: "${{ needs.release.outputs.hashes }}"
+      upload-assets: true
