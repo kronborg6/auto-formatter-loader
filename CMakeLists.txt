@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 4.2)
 
-project(setup
+project(auto-formater
     VERSION 0.8.0
     DESCRIPTION "C++ project that loads your formatter into an active project"
     LANGUAGES CXX
