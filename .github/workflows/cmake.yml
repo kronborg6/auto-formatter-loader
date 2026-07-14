@@ -31,18 +31,18 @@ jobs:
     - name: Show CMake version
       run: cmake --version
 
-      - name: Configure CMake
-        run: >
-          cmake
-          -S "${{ github.workspace }}"
-          -B "${{ github.workspace }}/build"
-          -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+    - name: Configure CMake
+      run: >
+        cmake
+        -S "${{ github.workspace }}"
+        -B "${{ github.workspace }}/build"
+        -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
 
-      - name: Build
-        run: >
-          cmake
-          --build "${{ github.workspace }}/build"
-          --config "${{ env.BUILD_TYPE }}"
+    - name: Build
+      run: >
+        cmake
+        --build "${{ github.workspace }}/build"
+        --config "${{ env.BUILD_TYPE }}"
 
   #  - name: Test
    #   working-directory: ${{github.workspace}}/build
