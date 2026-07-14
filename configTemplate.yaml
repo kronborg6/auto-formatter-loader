@@ -11,6 +11,9 @@ addToGitIgnore: true
 # Optional. Default: 3
 depth: 3
 
+# Optional. Default: "~/.config/autoFormatter/logs"
+logPath: "~/.config/autoFormatter/logs"
+
 # Optional. Default: [".git", "build", "target"]
 exludeFolders:
   - ".git"
