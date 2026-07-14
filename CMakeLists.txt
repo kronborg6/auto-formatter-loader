@@ -24,7 +24,30 @@ option(DEV_MODE "Enable debug printing" OFF)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Dependencies
+add_executable(${PROJECT_NAME}
+    src/main.cpp
+    src/log.cpp
+    src/processInfo.cpp
+    src/project_type.cpp
+    src/stringHelper.cpp
+    src/programs.cpp
+    src/templateLoader.cpp
+    src/config.cpp
+    src/language.cpp
+    src/gitignore.cpp
+)
+
+target_compile_definitions(${PROJECT_NAME} PRIVATE
+    $<$<BOOL:${DEV_MODE}>:DEV_MODE>
+)
+
+target_compile_features(${PROJECT_NAME} PRIVATE cxx_std_23)
+
+target_include_directories(${PROJECT_NAME} PRIVATE
+    ${PROJECT_SOURCE_DIR}/include
+    ${PROJECT_SOURCE_DIR}/include/formatter
+)
+
 include(FetchContent)
 
 FetchContent_Declare(
