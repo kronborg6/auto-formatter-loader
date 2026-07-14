@@ -1,12 +1,16 @@
 cmake_minimum_required(VERSION 4.2)
+
 project(setup
-    VERSION 0.1.0
+    VERSION 0.8.0
+    DESCRIPTION "C++ project that loads your formatter into an active project"
     LANGUAGES CXX
 )
-if(NOT CMAKE_BUILD_TYPE)
+
+if(NOT CMAKE_BUILD_TYPE AND NOT CMAKE_CONFIGURATION_TYPES)
     set(CMAKE_BUILD_TYPE Debug CACHE STRING "Build type" FORCE)
 endif()
-option(DEV_MODE "Enbale debug print" OFF)
+
+option(DEV_MODE "Enable debug printing" OFF)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
@@ -36,15 +40,20 @@ target_include_directories(${PROJECT_NAME} PRIVATE
 include(FetchContent)
 
 FetchContent_Declare(
-  yaml-cpp
-  GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
+    yaml-cpp
+    GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
+    GIT_TAG master
+    GIT_SHALLOW TRUE
 )
+
 FetchContent_MakeAvailable(yaml-cpp)
 
-target_link_libraries(${PROJECT_NAME} PUBLIC yaml-cpp::yaml-cpp) # The library or executable that require yaml-cpp library
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    yaml-cpp::yaml-cpp
+)
 
-
-target_compile_options(${PROJECT_NAME} PRIVATE
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    target_compile_options(${PROJECT_NAME} PRIVATE
         -Wall
         -Wextra
         -Wpedantic
@@ -63,7 +72,15 @@ target_compile_options(${PROJECT_NAME} PRIVATE
         $<$<CONFIG:Debug>:-g>
         $<$<CONFIG:Debug>:-O0>
         $<$<CONFIG:Debug>:-fno-omit-frame-pointer>
+    )
+endif()
+
+# Install the executable into the package
+install(
+    TARGETS ${PROJECT_NAME}
+    RUNTIME DESTINATION bin
 )
+
 # ----------------------------
 # CPack packaging
 # ----------------------------
@@ -71,19 +88,19 @@ target_compile_options(${PROJECT_NAME} PRIVATE
 set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
 set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
 set(CPACK_PACKAGE_VENDOR "Kronborg")
-set(CPACK_PACKAGE_CONTACT "kronborgcode@gmail.com")
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "C++ project setup tool")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "${PROJECT_DESCRIPTION}")
 
-set(CPACK_PACKAGE_FILE_NAME
+set(
+    CPACK_PACKAGE_FILE_NAME
     "${CPACK_PACKAGE_NAME}-${CPACK_PACKAGE_VERSION}-${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}"
 )
 
-# For .deb packages
+set(CPACK_GENERATOR "TGZ;ZIP;DEB")
+
+# Debian package settings
 set(CPACK_DEBIAN_PACKAGE_MAINTAINER "Kronborg")
 set(CPACK_DEBIAN_PACKAGE_SECTION "utils")
 set(CPACK_DEBIAN_PACKAGE_PRIORITY "optional")
-
-# Let CPack detect shared library dependencies for .deb
 set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
 
 include(CPack)
