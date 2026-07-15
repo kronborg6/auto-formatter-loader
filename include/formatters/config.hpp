@@ -10,6 +10,11 @@
 namespace fs = std::filesystem;
 
 namespace option {
+  enum LogLevel {
+    NONE = 0,
+    PRINT = 1,
+    FILE = 2
+  };
   const std::optional<fs::path> getHomePath();
   class Config {
     public:
@@ -70,18 +75,9 @@ namespace option {
       int maxDepth_ = 3;
       bool overrideFormatter_ = true;
       bool addToGitIgnore_ = true;
-      fs::path logsPath_;
+      std::optional<fs::path> logsPath_;
+      LogLevel logLevel_ = LogLevel::FILE;
 
       void LoadFromNode(const YAML::Node& node);
   };
-
-  // template <>
-  // inline std::vector<std::string> Config::getExcludeFolders<std::vector<std::string>>() const {
-  //   return excludeFolders_;
-  // }
-  //
-  // template <>
-  // inline std::unordered_set<std::string>
-  // Config::getExcludeFolders<std::unordered_set<std::string>>() const {
-  //   return std::unordered_set<std::string>(excludeFolders_.begin(), excludeFolders_.end());
 } // namespace option
