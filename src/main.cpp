@@ -47,15 +47,15 @@ std::set<std::string> get_pids() {
 size_t count = 0;
 
 int main(void) {
-  Config::Log logger;
-  logger.write("hello mega test");
-  logger.write("hello mega test");
-  logger.write("hello mega test");
-  logger.write("hello mega test");
-  logger.write("hello mega test");
-  logger.write("hello mega test");
-  logger.write("hello mega test");
-  logger.write("hello mega test");
+  // Config::Log logger;
+  // logger.write("hello mega test");
+  // logger.write("hello mega test");
+  // logger.write("hello mega test");
+  // logger.write("hello mega test");
+  // logger.write("hello mega test");
+  // logger.write("hello mega test");
+  // logger.write("hello mega test");
+  // logger.write("hello mega test");
   option::Config config = option::Config(YAML::LoadFile("/home/kronborg/.auto-formatter.yaml"));
 
   Programs progams;
