@@ -1,6 +1,7 @@
 #include "formatters/config.hpp"
 #include "formatters/log.hpp"
 #include "formatters/templateLoader.hpp"
+#include "helper.hpp"
 #include "iostream"
 #include "progams.hpp"
 #include "yaml-cpp/node/parse.h"
@@ -57,14 +58,16 @@ int main(void) {
 #endif
 
   if (config.getLogPath().has_value()) {
-    auto path = config.getLogPath().value() / "test.log";
+    // need to be a customer name somfig like log-2026-07-21-17-60:01
+    std::string format = "_%y-%m:%d.log";
+    std::string name = "log" + Helper::getTimeNow(format);
+    auto path = config.getLogPath().value() / name;
     std::ofstream output(path, std::ios::app);
 
     if (!output)
       return 0;
 
     Config::Log log(output);
-    log.write("hwelo");
   }
 
   Programs progams;

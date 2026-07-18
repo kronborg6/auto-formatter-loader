@@ -16,6 +16,7 @@ namespace Config {
       void write(std::string_view text);
       std::time_t getTimeNowUtc();
       std::string getTimeNow(bool withDate = false);
+      std::string getTimeNow(std::string format);
 
     private:
       std::ostream& output_;
