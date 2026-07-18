@@ -66,6 +66,16 @@ namespace option {
         return maxDepth_;
       }
 
+      LogLevel getLogLevel() const {
+        return logLevel_;
+      }
+      std::optional<fs::path> getLogPath() const {
+        if (logLevel_ == LogLevel::FILE && logsPath_.has_value())
+          return logsPath_;
+
+        return std::nullopt;
+      }
+
     private:
       fs::path path_;
       std::string filename_;
