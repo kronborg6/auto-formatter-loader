@@ -6,8 +6,11 @@
 #include "yaml-cpp/node/parse.h"
 #include <cctype>
 #include <chrono>
+#include <cmath>
 #include <cstddef>
 #include <filesystem>
+#include <fstream>
+#include <ostream>
 #include <ranges>
 #include <set>
 #include <string>
@@ -47,16 +50,22 @@ std::set<std::string> get_pids() {
 size_t count = 0;
 
 int main(void) {
-  // Config::Log logger;
-  // logger.write("hello mega test");
-  // logger.write("hello mega test");
-  // logger.write("hello mega test");
-  // logger.write("hello mega test");
-  // logger.write("hello mega test");
-  // logger.write("hello mega test");
-  // logger.write("hello mega test");
-  // logger.write("hello mega test");
+#ifdef DEV_MODE
   option::Config config = option::Config(YAML::LoadFile("/home/kronborg/.auto-formatter.yaml"));
+#else
+  option::Config config = option::Config();
+#endif
+
+  if (config.getLogPath().has_value()) {
+    auto path = config.getLogPath().value() / "test.log";
+    std::ofstream output(path, std::ios::app);
+
+    if (!output)
+      return 0;
+
+    Config::Log log(output);
+    log.write("hwelo");
+  }
 
   Programs progams;
   // need to make a load from config her

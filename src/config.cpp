@@ -15,7 +15,7 @@ namespace fs = std::filesystem;
 
 namespace option {
 
-  const fs::path getLogPath(const YAML::Node& node);
+  const fs::path localGetLogPath(const YAML::Node& node);
   Config::Config() {
     std::optional<fs::path> home = getHomePath();
     if (!home.has_value())
@@ -95,7 +95,11 @@ namespace option {
     switch (logLevel_) {
     case option::LogLevel::FILE:
       if (node["logPath"]) {
-        logsPath_ = getLogPath(node);
+        logsPath_ = localGetLogPath(node);
+      } else {
+        auto home = getHomePath();
+        if (home.has_value())
+          logsPath_ = home.value() / ".config/autoFormatter/logs";
       }
       break;
     case option::LogLevel::PRINT:
@@ -105,7 +109,7 @@ namespace option {
     }
   }
 
-  const fs::path getLogPath(const YAML::Node& node) {
+  const fs::path localGetLogPath(const YAML::Node& node) {
     std::string_view path = node["addToGitIgnore"].as<std::string_view>();
     return fs::path(path);
   }
