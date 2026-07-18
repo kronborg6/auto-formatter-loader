@@ -69,6 +69,7 @@ add_library(auto_formater_lib STATIC
     src/language.cpp
     src/gitignore.cpp
     src/log.cpp
+    src/helper.cpp
 )
 
 target_compile_features(auto_formater_lib
