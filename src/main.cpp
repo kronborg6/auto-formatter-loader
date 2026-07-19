@@ -58,23 +58,28 @@ int main(void) {
   option::Config config = option::Config();
 #endif
 
-  if (config.getLogPath().has_value()) {
-    // need to be a customer name somfig like log-2026-07-21-17-60:01
-    std::string format = "_%y-%m-%d.log";
-    std::string name = "log" + Helper::getTimeNow(format);
-    auto path = config.getLogPath().value() / name;
-    // std::ofstream output(path, std::ios::app);
-    //
-    // if (!output)
-    //   return 0;
+  switch (config.getLogLevel()) {
+  case option::LogLevel::FILE:
+    if (config.getLogPath().has_value()) {
+      // need to be a customer name somfig like log-2026-07-21-17-60:01
+      std::string format = "_%y-%m-%d.log";
+      std::string name = "log" + Helper::getTimeNow(format);
+      auto path = config.getLogPath().value() / name;
 
-    if (!Config::GlobalLogger::instance().initialize(path)) {
+      if (!Config::GlobalLogger::instance().initialize(path)) {
+        std::cerr << "failed to initialize logger\n";
+        return 1;
+      }
+    }
+    break;
+  case option::LogLevel::PRINT:
+    if (!Config::GlobalLogger::instance().initialize()) {
       std::cerr << "failed to initialize logger\n";
       return 1;
     }
-    Config::GlobalLogger::instance().Logln("aasd");
-
-    // Config::Log log(output);
+    break;
+  case option::LogLevel::NONE:
+    break;
   }
 
   Programs progams;
@@ -113,9 +118,9 @@ int main(void) {
     pids = progams.enablePids;
   }
 
-  for (const auto& x : progams.formaters | std::views::values) {
-    Config::GlobalLogger::instance().Logln(std::format("pid: "));
-    // std::cout << "pid: " << x.print() << "CWD: " << x.getPath() << std::endl;
-  }
+  // for (const auto& x : progams.formaters | std::views::values) {
+  //   Config::GlobalLogger::instance().Logln(std::format("pid: "));
+  //   // std::cout << "pid: " << x.print() << "CWD: " << x.getPath() << std::endl;
+  // }
   return 0;
 }

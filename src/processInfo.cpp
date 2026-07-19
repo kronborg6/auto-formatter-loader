@@ -93,7 +93,6 @@ ProcessInfo::ProcessInfo(std::string pid,
           .text = "",
       });
 
-      std::cerr << "using this=" << this << " has_value=" << this->gitingore_.has_value() << '\n';
       assert(this->gitingore_.has_value());
     }
 
@@ -125,7 +124,7 @@ ProcessInfo::ProcessInfo(std::string pid,
   }
 
   if (typeCount.empty()) {
-    std::cout << "no matchs PID: " << pid << std::endl;
+    Config::GlobalLogger::instance().Logln(std::format("{}", print()));
     return;
   }
 
@@ -134,9 +133,7 @@ ProcessInfo::ProcessInfo(std::string pid,
 
   type_ = maxType->first;
 
-  std::cout << std::boolalpha << "has_value = " << oldFormatter_.has_value() << '\n';
   if (oldFormatter_.has_value()) {
-    std::cout << oldFormatter_.value().filePath << "\n";
     return;
   }
 
