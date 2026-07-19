@@ -178,7 +178,7 @@ void ProcessInfo::enable() {
     fs::create_symlink(formatterTemplate_->filePath,
                        this->path_ + "/" + this->formatterTemplate_->filename);
     file_ = this->formatterTemplate_->filename;
-    Config::GlobalLogger::instance().Logln(std::format("created system link for ", print()));
+    Config::GlobalLogger::instance().Logln(std::format("created system link for {}", print()));
     if (this->gitingore_.has_value()) {
       this->gitingore_->addToGitignore(formatterTemplate_->filename);
     }
