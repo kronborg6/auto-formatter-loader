@@ -1,5 +1,6 @@
 #include "helper.hpp"
 #include <chrono>
+#include <ctime>
 #include <iomanip>
 
 std::time_t Helper::getTimeNowUtc() {
@@ -32,9 +33,9 @@ std::string Helper::getTimeNow(std::string format) {
   std::tm utcTime{};
 
 #ifdef _WIN32
-  gmtime_s(&utcTime, &now);
+  localtime_s(&utcTime, &now);
 #else
-  gmtime_r(&now, &utcTime);
+  localtime_r(&now, &utcTime);
 #endif
 
   std::ostringstream output;

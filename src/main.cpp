@@ -59,7 +59,7 @@ int main(void) {
 
   if (config.getLogPath().has_value()) {
     // need to be a customer name somfig like log-2026-07-21-17-60:01
-    std::string format = "_%y-%m:%d.log";
+    std::string format = "_%y-%m-%d.log";
     std::string name = "log" + Helper::getTimeNow(format);
     auto path = config.getLogPath().value() / name;
     // std::ofstream output(path, std::ios::app);
@@ -71,7 +71,7 @@ int main(void) {
       std::cerr << "failed to initialize logger\n";
       return 1;
     }
-    Config::GlobalLogger::instance().writeln("test 123");
+    Config::GlobalLogger::instance().Logln("aasd");
 
     // Config::Log log(output);
   }
