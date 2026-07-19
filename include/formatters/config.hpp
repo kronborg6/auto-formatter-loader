@@ -23,18 +23,19 @@ namespace option {
       Config(YAML::Node node);
       Config(fs::path path);
 
-      std::vector<Language> getLauges() const {
-        return languge_;
+      std::vector<Language> getLanguages() const {
+        return language_;
       }
-      std::string getPrograming(const std::string& name) const {
-        for (const auto& lang : languge_) {
+      std::optional<std::string> getPrograming(const std::string& name) const {
+        for (const auto& lang : language_) {
           if (lang.name == name) {
             return lang.name;
           }
         }
+        return std::nullopt;
       }
       std::optional<Language> findLanugeByFileType(const std::string& name) const {
-        for (const auto& lang : languge_) {
+        for (const auto& lang : language_) {
           for (const std::string& type : lang.filetypes) {
             if (type == name) {
               return lang;
@@ -43,12 +44,13 @@ namespace option {
         }
         return std::nullopt;
       }
-      Language findLanuge(const std::string& name) const {
-        for (const auto& lang : languge_) {
+      std::optional<Language> findLanuge(const std::string& name) const {
+        for (const auto& lang : language_) {
           if (lang.name == name) {
             return lang;
           }
         }
+        return std::nullopt;
       }
       std::unordered_set<std::string> getExcludeFolders() const {
         return std::unordered_set<std::string>(excludeFolders_.begin(), excludeFolders_.end());
@@ -79,7 +81,7 @@ namespace option {
     private:
       fs::path path_;
       std::string filename_;
-      std::vector<Language> languge_;
+      std::vector<Language> language_;
       std::set<std::string> ides_;
       std::vector<std::string> excludeFolders_ = {".git", "build"};
       int maxDepth_ = 3;

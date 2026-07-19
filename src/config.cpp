@@ -61,7 +61,7 @@ namespace option {
     }
 
     if (node["formatters"]) {
-      languge_ = node["formatters"].as<std::vector<Language>>();
+      language_ = node["formatters"].as<std::vector<Language>>();
     } else {
       // need to either thow a error
       // print it
@@ -110,7 +110,7 @@ namespace option {
   }
 
   const fs::path localGetLogPath(const YAML::Node& node) {
-    std::string_view path = node["addToGitIgnore"].as<std::string_view>();
+    std::string_view path = node["logPath"].as<std::string_view>();
     return fs::path(path);
   }
 
