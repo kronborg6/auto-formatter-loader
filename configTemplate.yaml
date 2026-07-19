@@ -17,10 +17,11 @@ logLvl: 2
 logPath: "~/.config/autoFormatter/logs"
 
 # Optional. Default: [".git", "build", "target"]
-exludeFolders:
+excludeFolders:
   - ".git"
   - "build"
   - "target"
+  - "extren"
 
 formatters:
   - cpp:

@@ -55,6 +55,8 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         -Wnull-dereference
         -Wdouble-promotion
         -Wformat=2
+    $<$<CONFIG:Debug>:-O0>
+    $<$<CONFIG:Debug>:-g3>
     )
 endif()
 

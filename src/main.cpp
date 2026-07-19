@@ -4,16 +4,11 @@
 #include "helper.hpp"
 #include "iostream"
 #include "progams.hpp"
-#include "yaml-cpp/node/parse.h"
 #include <cctype>
 #include <chrono>
-#include <cmath>
 #include <cstddef>
 #include <filesystem>
 #include <format>
-#include <fstream>
-#include <ostream>
-#include <ranges>
 #include <set>
 #include <string>
 #include <sys/inotify.h>
