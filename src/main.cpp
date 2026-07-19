@@ -62,12 +62,18 @@ int main(void) {
     std::string format = "_%y-%m:%d.log";
     std::string name = "log" + Helper::getTimeNow(format);
     auto path = config.getLogPath().value() / name;
-    std::ofstream output(path, std::ios::app);
+    // std::ofstream output(path, std::ios::app);
+    //
+    // if (!output)
+    //   return 0;
 
-    if (!output)
-      return 0;
+    if (!Config::GlobalLogger::instance().initialize(path)) {
+      std::cerr << "failed to initialize logger\n";
+      return 1;
+    }
+    Config::GlobalLogger::instance().writeln("test 123");
 
-    Config::Log log(output);
+    // Config::Log log(output);
   }
 
   Programs progams;
