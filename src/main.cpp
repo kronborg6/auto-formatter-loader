@@ -64,6 +64,7 @@ int main(void) {
       // need to be a customer name somfig like log-2026-07-21-17-60:01
       std::string format = "_%y-%m-%d.log";
       std::string name = "log" + Helper::getTimeNow(format);
+      std::filesystem::create_directories(config.getLogPath().value());
       auto path = config.getLogPath().value() / name;
 
       if (!Config::GlobalLogger::instance().initialize(path)) {

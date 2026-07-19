@@ -64,7 +64,7 @@ ProcessInfo::ProcessInfo(std::string pid,
 
   // make the filetype ProgramingLaunge hash_maps here
   std::unordered_map<std::string, std::string> all;
-  for (const auto& lang : config.getLauges()) {
+  for (const auto& lang : config.getLanguages()) {
     for (const auto& type : lang.filetypes) {
       all[type] = lang.name;
     }
