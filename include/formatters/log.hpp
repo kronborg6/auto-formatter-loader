@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <format>
 #include <fstream>
+#include <iostream>
 #include <ostream>
 #include <string>
 #include <string_view>
@@ -37,6 +38,12 @@ namespace Config {
         }
 
         log_.emplace(output_);
+        return true;
+      }
+
+      bool initialize() {
+
+        log_.emplace(std::cout);
         return true;
       }
       Config::Log* get() {
