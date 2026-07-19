@@ -10,6 +10,7 @@
 #include <cmath>
 #include <cstddef>
 #include <filesystem>
+#include <format>
 #include <fstream>
 #include <ostream>
 #include <ranges>
@@ -106,13 +107,15 @@ int main(void) {
     }
     if (count != progams.formaters.size()) {
       count = progams.formaters.size();
-      std::cout << "formaters cout: " << count << std::endl;
+
+      Config::GlobalLogger::instance().Logln(std::format("enabled formater count: {} ", count));
     }
     pids = progams.enablePids;
   }
 
   for (const auto& x : progams.formaters | std::views::values) {
-    std::cout << "pid: " << x.print() << "CWD: " << x.getPath() << std::endl;
+    Config::GlobalLogger::instance().Logln(std::format("pid: "));
+    // std::cout << "pid: " << x.print() << "CWD: " << x.getPath() << std::endl;
   }
   return 0;
 }

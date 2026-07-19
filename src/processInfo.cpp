@@ -2,12 +2,14 @@
 #include "fileFinder.hpp"
 #include "formatters/config.hpp"
 #include "formatters/formatter.hpp"
+#include "formatters/log.hpp"
 #include "formatters/templateLoader.hpp"
 #include "language.hpp"
 #include <algorithm>
 #include <cassert>
 #include <cstdio>
 #include <filesystem>
+#include <format>
 #include <fstream>
 #include <iostream>
 #include <optional>
@@ -26,14 +28,16 @@ ProcessInfo::~ProcessInfo() {
 
     if (fs::remove(this->path_ + "/" + this->formatterTemplate_->filename)) {
 
-      std::cout << "removed formatter for PID: " << this->print() << "\n";
+      Config::GlobalLogger::instance().Logln(
+          std::format("Remove formater for PID: {}", this->print()));
 
       if (this->gitingore_.has_value())
         this->gitingore_->removeFromGitignore();
 
     } else {
 
-      std::cout << "failed to remove the link for PID: " << this->print() << "\n";
+      Config::GlobalLogger::instance().Logln(
+          std::format("Failed to remove formater for PID: {}", this->print()));
     }
   }
 }
@@ -177,7 +181,7 @@ void ProcessInfo::enable() {
     fs::create_symlink(formatterTemplate_->filePath,
                        this->path_ + "/" + this->formatterTemplate_->filename);
     file_ = this->formatterTemplate_->filename;
-    std::cout << "created system link\n";
+    Config::GlobalLogger::instance().Logln(std::format("created system link for ", print()));
     if (this->gitingore_.has_value()) {
       this->gitingore_->addToGitignore(formatterTemplate_->filename);
     }
