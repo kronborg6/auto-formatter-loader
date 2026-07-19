@@ -1,8 +1,11 @@
 #pragma once
 
+#include "helper.hpp"
 #include <filesystem>
+#include <format>
 #include <fstream>
 #include <ostream>
+#include <string>
 #include <string_view>
 
 namespace Config {
@@ -43,6 +46,13 @@ namespace Config {
       void writeln(const std::string& message) {
         if (log_) {
           log_->writeln(message);
+        }
+      }
+      void Logln(const std::string& message) {
+        if (log_) {
+          std::string format = "%H:%M:%S";
+          std::string msg = std::format("[{}] {}", Helper::getTimeNow(format), message);
+          log_->writeln(msg);
         }
       }
 
