@@ -11,6 +11,8 @@ addToGitIgnore: true
 # Optional. Default: 3
 depth: 3
 
+# Optional. Default: 2
+logLvl: 2
 # Optional. Default: "~/.config/autoFormatter/logs"
 logPath: "~/.config/autoFormatter/logs"
 

@@ -1,13 +1,18 @@
 #include "formatters/config.hpp"
 #include "formatters/log.hpp"
 #include "formatters/templateLoader.hpp"
+#include "helper.hpp"
 #include "iostream"
 #include "progams.hpp"
 #include "yaml-cpp/node/parse.h"
 #include <cctype>
 #include <chrono>
+#include <cmath>
 #include <cstddef>
 #include <filesystem>
+#include <format>
+#include <fstream>
+#include <ostream>
 #include <ranges>
 #include <set>
 #include <string>
@@ -47,16 +52,36 @@ std::set<std::string> get_pids() {
 size_t count = 0;
 
 int main(void) {
-  Config::Log logger;
-  logger.write("hello mega test");
-  logger.write("hello mega test");
-  logger.write("hello mega test");
-  logger.write("hello mega test");
-  logger.write("hello mega test");
-  logger.write("hello mega test");
-  logger.write("hello mega test");
-  logger.write("hello mega test");
+#ifdef DEV_MODE
   option::Config config = option::Config(YAML::LoadFile("/home/kronborg/.auto-formatter.yaml"));
+#else
+  option::Config config = option::Config();
+#endif
+
+  switch (config.getLogLevel()) {
+  case option::LogLevel::FILE:
+    if (config.getLogPath().has_value()) {
+      // need to be a customer name somfig like log-2026-07-21-17-60:01
+      std::string format = "_%y-%m-%d.log";
+      std::string name = "log" + Helper::getTimeNow(format);
+      std::filesystem::create_directories(config.getLogPath().value());
+      auto path = config.getLogPath().value() / name;
+
+      if (!Config::GlobalLogger::instance().initialize(path)) {
+        std::cerr << "failed to initialize logger\n";
+        return 1;
+      }
+    }
+    break;
+  case option::LogLevel::PRINT:
+    if (!Config::GlobalLogger::instance().initialize()) {
+      std::cerr << "failed to initialize logger\n";
+      return 1;
+    }
+    break;
+  case option::LogLevel::NONE:
+    break;
+  }
 
   Programs progams;
   // need to make a load from config her
@@ -88,13 +113,15 @@ int main(void) {
     }
     if (count != progams.formaters.size()) {
       count = progams.formaters.size();
-      std::cout << "formaters cout: " << count << std::endl;
+
+      Config::GlobalLogger::instance().Logln(std::format("enabled formater count: {} ", count));
     }
     pids = progams.enablePids;
   }
 
-  for (const auto& x : progams.formaters | std::views::values) {
-    std::cout << "pid: " << x.print() << "CWD: " << x.getPath() << std::endl;
-  }
+  // for (const auto& x : progams.formaters | std::views::values) {
+  //   Config::GlobalLogger::instance().Logln(std::format("pid: "));
+  //   // std::cout << "pid: " << x.print() << "CWD: " << x.getPath() << std::endl;
+  // }
   return 0;
 }

@@ -2,12 +2,14 @@
 #include "fileFinder.hpp"
 #include "formatters/config.hpp"
 #include "formatters/formatter.hpp"
+#include "formatters/log.hpp"
 #include "formatters/templateLoader.hpp"
 #include "language.hpp"
 #include <algorithm>
 #include <cassert>
 #include <cstdio>
 #include <filesystem>
+#include <format>
 #include <fstream>
 #include <iostream>
 #include <optional>
@@ -26,14 +28,16 @@ ProcessInfo::~ProcessInfo() {
 
     if (fs::remove(this->path_ + "/" + this->formatterTemplate_->filename)) {
 
-      std::cout << "removed formatter for PID: " << this->print() << "\n";
+      Config::GlobalLogger::instance().Logln(
+          std::format("Remove formater for PID: {}", this->print()));
 
       if (this->gitingore_.has_value())
         this->gitingore_->removeFromGitignore();
 
     } else {
 
-      std::cout << "failed to remove the link for PID: " << this->print() << "\n";
+      Config::GlobalLogger::instance().Logln(
+          std::format("Failed to remove formater for PID: {}", this->print()));
     }
   }
 }
@@ -60,7 +64,7 @@ ProcessInfo::ProcessInfo(std::string pid,
 
   // make the filetype ProgramingLaunge hash_maps here
   std::unordered_map<std::string, std::string> all;
-  for (const auto& lang : config.getLauges()) {
+  for (const auto& lang : config.getLanguages()) {
     for (const auto& type : lang.filetypes) {
       all[type] = lang.name;
     }
@@ -89,7 +93,6 @@ ProcessInfo::ProcessInfo(std::string pid,
           .text = "",
       });
 
-      std::cerr << "using this=" << this << " has_value=" << this->gitingore_.has_value() << '\n';
       assert(this->gitingore_.has_value());
     }
 
@@ -121,7 +124,7 @@ ProcessInfo::ProcessInfo(std::string pid,
   }
 
   if (typeCount.empty()) {
-    std::cout << "no matchs PID: " << pid << std::endl;
+    Config::GlobalLogger::instance().Logln(std::format("{}", print()));
     return;
   }
 
@@ -130,9 +133,7 @@ ProcessInfo::ProcessInfo(std::string pid,
 
   type_ = maxType->first;
 
-  std::cout << std::boolalpha << "has_value = " << oldFormatter_.has_value() << '\n';
   if (oldFormatter_.has_value()) {
-    std::cout << oldFormatter_.value().filePath << "\n";
     return;
   }
 
@@ -177,7 +178,7 @@ void ProcessInfo::enable() {
     fs::create_symlink(formatterTemplate_->filePath,
                        this->path_ + "/" + this->formatterTemplate_->filename);
     file_ = this->formatterTemplate_->filename;
-    std::cout << "created system link\n";
+    Config::GlobalLogger::instance().Logln(std::format("created system link for {}", print()));
     if (this->gitingore_.has_value()) {
       this->gitingore_->addToGitignore(formatterTemplate_->filename);
     }

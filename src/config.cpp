@@ -4,6 +4,7 @@
 #include "yaml-cpp/node/parse.h"
 #include <cstdlib>
 #include <filesystem>
+#include <optional>
 #include <set>
 #include <stdexcept>
 #include <string>
@@ -14,6 +15,7 @@ namespace fs = std::filesystem;
 
 namespace option {
 
+  const fs::path localGetLogPath(const YAML::Node& node);
   Config::Config() {
     std::optional<fs::path> home = getHomePath();
     if (!home.has_value())
@@ -59,7 +61,7 @@ namespace option {
     }
 
     if (node["formatters"]) {
-      languge_ = node["formatters"].as<std::vector<Language>>();
+      language_ = node["formatters"].as<std::vector<Language>>();
     } else {
       // need to either thow a error
       // print it
@@ -84,16 +86,32 @@ namespace option {
       addToGitIgnore_ = node["addToGitIgnore"].as<bool>();
     }
 
-    if (node["logPath"]) {
-      std::string_view path = node["addToGitIgnore"].as<std::string_view>();
-      logsPath_ = fs::path(path);
-    } else {
-      auto home = getHomePath();
-      if (!home.has_value()) {
-        throw std::invalid_argument("missing home path");
-      }
-      logsPath_ = home.value() / ".config/autoFormatter/logs";
+    if (node["logLevel"]) {
+
+      int lvl = node["logLevel"].as<int>();
+      logLevel_ = static_cast<LogLevel>(lvl);
     }
+
+    switch (logLevel_) {
+    case option::LogLevel::FILE:
+      if (node["logPath"]) {
+        logsPath_ = localGetLogPath(node);
+      } else {
+        auto home = getHomePath();
+        if (home.has_value())
+          logsPath_ = home.value() / ".config/autoFormatter/logs";
+      }
+      break;
+    case option::LogLevel::PRINT:
+    case option::LogLevel::NONE:
+      logsPath_ = std::nullopt;
+      break;
+    }
+  }
+
+  const fs::path localGetLogPath(const YAML::Node& node) {
+    std::string_view path = node["logPath"].as<std::string_view>();
+    return fs::path(path);
   }
 
   const std::optional<fs::path> getHomePath() {
