@@ -16,13 +16,8 @@ std::optional<fs::directory_entry> FindMatch(const fs::path& path, const Contain
   }
   return std::nullopt;
 }
-// template <typename Container>
-// std::optional<std::string> FindMatch(const std::string& name, const Container& targets);
 template <typename T, typename Options, typename Target>
 std::optional<T> FindMatch(const Options& options, const Target& targets);
-
-// template <typename T, typename Options, typename Target>
-// std::optional<T> FindMatch(const Options& options, const Target& targets);
 
 template <typename Key, typename Value>
 std::optional<Value> FindMatch(const Key& key, const std::unordered_map<Key, Value>& targets) {
