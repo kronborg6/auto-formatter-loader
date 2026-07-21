@@ -109,6 +109,7 @@ ProcessInfo::ProcessInfo(std::string pid,
     if (config.getOverRideFormater()) {
 
       std::optional<Formatter> temp = FindMatch(filename, templates.GetFormatters());
+
       if (temp.has_value()) {
         Formatter oldformater{
             .filename = temp.value().filename,
