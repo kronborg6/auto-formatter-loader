@@ -113,10 +113,5 @@ int main(void) {
     }
     pids = progams.enablePids;
   }
-
-  // for (const auto& x : progams.formaters | std::views::values) {
-  //   Config::GlobalLogger::instance().Logln(std::format("pid: "));
-  //   // std::cout << "pid: " << x.print() << "CWD: " << x.getPath() << std::endl;
-  // }
   return 0;
 }

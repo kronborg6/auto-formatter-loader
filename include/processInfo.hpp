@@ -69,6 +69,8 @@ class ProcessInfo {
       return isEnable_;
     }
 
+    bool removeOldFormaterTag();
+
     void enable();
 
   private:

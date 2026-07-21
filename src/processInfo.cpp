@@ -33,6 +33,8 @@ ProcessInfo::~ProcessInfo() {
 
       if (this->gitingore_.has_value())
         this->gitingore_->removeFromGitignore();
+      if (this->oldFormatter_.has_value())
+        removeOldFormaterTag();
 
     } else {
 
@@ -111,7 +113,8 @@ ProcessInfo::ProcessInfo(std::string pid,
           .filename = temp.value().filename,
           .filePath = entry.path(),
       };
-      oldFormatter_ = oldformater;
+      if (config.getOverRideFormater())
+        oldFormatter_ = oldformater;
     }
 
     // need to change this to use langue from config
@@ -133,7 +136,7 @@ ProcessInfo::ProcessInfo(std::string pid,
 
   type_ = maxType->first;
 
-  if (oldFormatter_.has_value()) {
+  if (oldFormatter_.has_value() && !config.getOverRideFormater()) {
     return;
   }
 
@@ -171,17 +174,35 @@ bool match_name(const std::string& pid, const std::set<std::string>& target) {
 }
 
 void ProcessInfo::enable() {
-  if (formatterTemplate_ == nullptr || isEnable_ || oldFormatter_.has_value())
+  if (formatterTemplate_ == nullptr || isEnable_)
     return;
 
+  if (oldFormatter_) {
+    Formatter& formatter = *oldFormatter_;
+
+    formatter.filename = std::format("{}.old-formatter", formatter.filename);
+
+    auto newPath = std::format("{}.old-formatter", formatter.filePath.filename().string());
+
+    fs::rename(formatter.filePath, newPath);
+
+    Config::GlobalLogger::instance().Logln(std::format(
+        "filepath: {} \nfilename: {}", formatter.filePath.string(), formatter.filename));
+  }
+
   if (!fs::exists(this->path_ + "/" + this->formatterTemplate_->filename)) {
+
     fs::create_symlink(formatterTemplate_->filePath,
                        this->path_ + "/" + this->formatterTemplate_->filename);
+
     file_ = this->formatterTemplate_->filename;
+
     Config::GlobalLogger::instance().Logln(std::format("created system link for {}", print()));
+
     if (this->gitingore_.has_value()) {
       this->gitingore_->addToGitignore(formatterTemplate_->filename);
     }
+
     isEnable_ = true;
   }
 }
@@ -190,6 +211,29 @@ bool ProcessInfo::createFormater() {
   if (this->formater_)
     return true;
   return true;
+}
+
+bool ProcessInfo::removeOldFormaterTag() {
+  if (oldFormatter_.has_value()) {
+    Config::GlobalLogger::instance().Logln(std::format("oldFormater, path: {}, filename: {}",
+                                                       oldFormatter_->filePath.string(),
+                                                       oldFormatter_->filename));
+
+    Formatter& formatter = *oldFormatter_;
+
+    formatter.filename = formatter.filePath.filename();
+
+    auto oldPath = std::format("{}.old-formatter", formatter.filePath.filename().string());
+
+    fs::rename(oldPath, formatter.filePath);
+    std::rename(std::format("{}/{}",
+                            oldFormatter_.value().filePath.root_directory().string(),
+                            oldFormatter_.value().filename)
+                    .c_str(),
+                oldFormatter_.value().filePath.c_str());
+    return true;
+  }
+  return false;
 }
 
 bool ProcessInfo::deletFormater() {
