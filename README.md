@@ -37,7 +37,6 @@ To run `auto-formatter`, you need:
 ```yaml
 IDE:
   - "nvim"
-  - "code"
 
 # Optional. Default: true
 overrideFormatter: true
