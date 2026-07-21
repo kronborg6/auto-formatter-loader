@@ -87,7 +87,6 @@ formatters:
 ```yaml
 IDE:
   - "nvim"
-  - "code"
 
 formatters:
   - cpp:
