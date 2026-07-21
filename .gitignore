@@ -4,3 +4,4 @@ ideas/
 .idea
 .idea/
 CMakeListsOLD.txt
+.clang-format

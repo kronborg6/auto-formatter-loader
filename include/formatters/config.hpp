@@ -78,6 +78,10 @@ namespace option {
         return std::nullopt;
       }
 
+      bool getOverRideFormater() const {
+        return overrideFormatter_;
+      }
+
     private:
       fs::path path_;
       std::string filename_;

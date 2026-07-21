@@ -24,7 +24,6 @@ option(DEV_MODE "Enable debug printing" OFF)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Dependencies
 include(FetchContent)
 
 FetchContent_Declare(
@@ -36,7 +35,10 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(yaml-cpp)
 
-# Shared warning settings for this project's targets
+####################
+# Compiler warnings
+####################
+
 add_library(project_warnings INTERFACE)
 
 if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
@@ -55,10 +57,15 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         -Wnull-dereference
         -Wdouble-promotion
         -Wformat=2
+        $<$<CONFIG:Debug>:-O0>
+        $<$<CONFIG:Debug>:-g3>
     )
 endif()
 
+####################
 # Application logic
+####################
+
 add_library(auto_formater_lib STATIC
     src/processInfo.cpp
     src/project_type.cpp
@@ -80,6 +87,7 @@ target_compile_features(auto_formater_lib
 target_include_directories(auto_formater_lib
     PUBLIC
         "${PROJECT_SOURCE_DIR}/include"
+        "${PROJECT_SOURCE_DIR}/include/formatter"
 )
 
 target_compile_definitions(auto_formater_lib
@@ -94,11 +102,17 @@ target_link_libraries(auto_formater_lib
         project_warnings
 )
 
-################
+############
 # Executable
-################
+############
+
 add_executable(${PROJECT_NAME}
     src/main.cpp
+)
+
+target_compile_features(${PROJECT_NAME}
+    PRIVATE
+        cxx_std_23
 )
 
 target_compile_definitions(${PROJECT_NAME}
@@ -111,24 +125,30 @@ target_link_libraries(${PROJECT_NAME}
         auto_formater_lib
         project_warnings
 )
-##########
+
+########
 # Tests
-##########
+########
+
 include(CTest)
 
 # if(BUILD_TESTING)
 #     add_subdirectory(tests)
 # endif()
 
-###################
+##############
 # Installation
-###################
+##############
+
 install(
     TARGETS ${PROJECT_NAME}
     RUNTIME DESTINATION bin
 )
 
+###########
 # Packaging
+###########
+
 set(CPACK_PACKAGE_NAME "${PROJECT_NAME}")
 set(CPACK_PACKAGE_VERSION "${PROJECT_VERSION}")
 set(CPACK_PACKAGE_VENDOR "Kronborg")

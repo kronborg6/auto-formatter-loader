@@ -4,16 +4,11 @@
 #include "helper.hpp"
 #include "iostream"
 #include "progams.hpp"
-#include "yaml-cpp/node/parse.h"
 #include <cctype>
 #include <chrono>
-#include <cmath>
 #include <cstddef>
 #include <filesystem>
 #include <format>
-#include <fstream>
-#include <ostream>
-#include <ranges>
 #include <set>
 #include <string>
 #include <sys/inotify.h>
@@ -118,10 +113,5 @@ int main(void) {
     }
     pids = progams.enablePids;
   }
-
-  // for (const auto& x : progams.formaters | std::views::values) {
-  //   Config::GlobalLogger::instance().Logln(std::format("pid: "));
-  //   // std::cout << "pid: " << x.print() << "CWD: " << x.getPath() << std::endl;
-  // }
   return 0;
 }
