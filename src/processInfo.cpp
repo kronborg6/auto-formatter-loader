@@ -106,15 +106,16 @@ ProcessInfo::ProcessInfo(std::string pid,
 
     std::string last = filename.substr(dotPos + 1);
 
-    std::optional<Formatter> temp = FindMatch(filename, templates.GetFormatters());
+    if (config.getOverRideFormater()) {
 
-    if (temp.has_value()) {
-      Formatter oldformater{
-          .filename = temp.value().filename,
-          .filePath = entry.path(),
-      };
-      if (config.getOverRideFormater())
+      std::optional<Formatter> temp = FindMatch(filename, templates.GetFormatters());
+      if (temp.has_value()) {
+        Formatter oldformater{
+            .filename = temp.value().filename,
+            .filePath = entry.path(),
+        };
         oldFormatter_ = oldformater;
+      }
     }
 
     // need to change this to use langue from config
@@ -178,16 +179,12 @@ void ProcessInfo::enable() {
     return;
 
   if (oldFormatter_) {
-    Formatter& formatter = *oldFormatter_;
+    auto newPath = oldFormatter_->filePath.string() + ".old-formatter";
 
-    formatter.filename = std::format("{}.old-formatter", formatter.filename);
+    fs::rename(oldFormatter_->filePath, newPath);
 
-    auto newPath = std::format("{}.old-formatter", formatter.filePath.filename().string());
-
-    fs::rename(formatter.filePath, newPath);
-
-    Config::GlobalLogger::instance().Logln(std::format(
-        "filepath: {} \nfilename: {}", formatter.filePath.string(), formatter.filename));
+    Config::GlobalLogger::instance().Logln(
+        std::format("Renamed old formatter: {} to {}", oldFormatter_->filePath.string(), newPath));
   }
 
   if (!fs::exists(this->path_ + "/" + this->formatterTemplate_->filename)) {
@@ -212,25 +209,15 @@ bool ProcessInfo::createFormater() {
     return true;
   return true;
 }
-
 bool ProcessInfo::removeOldFormaterTag() {
   if (oldFormatter_.has_value()) {
-    Config::GlobalLogger::instance().Logln(std::format("oldFormater, path: {}, filename: {}",
-                                                       oldFormatter_->filePath.string(),
-                                                       oldFormatter_->filename));
+    auto oldPath = oldFormatter_->filePath.string() + ".old-formatter";
 
-    Formatter& formatter = *oldFormatter_;
+    Config::GlobalLogger::instance().Logln(std::format(
+        "Restoring old formatter from: {} to {}", oldPath, oldFormatter_->filePath.string()));
 
-    formatter.filename = formatter.filePath.filename();
+    fs::rename(oldPath, oldFormatter_->filePath);
 
-    auto oldPath = std::format("{}.old-formatter", formatter.filePath.filename().string());
-
-    fs::rename(oldPath, formatter.filePath);
-    std::rename(std::format("{}/{}",
-                            oldFormatter_.value().filePath.root_directory().string(),
-                            oldFormatter_.value().filename)
-                    .c_str(),
-                oldFormatter_.value().filePath.c_str());
     return true;
   }
   return false;

@@ -21,7 +21,7 @@ excludeFolders:
   - ".git"
   - "build"
   - "target"
-  - "extren"
+  - "extern"
 
 formatters:
   - cpp:
