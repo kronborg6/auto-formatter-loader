@@ -132,9 +132,9 @@ target_link_libraries(${PROJECT_NAME}
 
 include(CTest)
 
-# if(BUILD_TESTING)
-#     add_subdirectory(tests)
-# endif()
+if(BUILD_TESTING)
+    add_subdirectory(tests)
+endif()
 
 ##############
 # Installation
