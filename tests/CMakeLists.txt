@@ -6,6 +6,7 @@ FetchContent_Declare(
     GIT_TAG v1.17.0
 )
 
+
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
@@ -18,6 +19,7 @@ target_link_libraries(unit_tests
     PRIVATE
         auto_formater_lib
         GTest::gtest_main
+        yaml-cpp
 )
 
 include(GoogleTest)
