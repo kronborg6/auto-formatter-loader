@@ -56,10 +56,6 @@ formatters:
         - ".cs"
 )");
 
-TEST(ConfigTest, load_config) {
-  EXPECT_EQ(1, 1);
-}
-
 TEST(ConfigTest, FindsLanguageByName) {
 
   const option::Config config(node);
@@ -68,4 +64,34 @@ TEST(ConfigTest, FindsLanguageByName) {
 
   ASSERT_TRUE(language.has_value());
   EXPECT_EQ(language->name, "cpp");
+  EXPECT_TRUE(config.getOverRideFormater());
+  EXPECT_TRUE(config.getAddToGitignore());
+  EXPECT_TRUE(config.getIdes().size() >= 1);
+}
+
+TEST(ConfigTest, MaxDepth) {
+
+  const option::Config config(node);
+
+  EXPECT_TRUE(config.getMaxDepth() >= 2);
+}
+
+TEST(ConfigTest, AddToGitingore) {
+
+  const option::Config config(node);
+
+  EXPECT_TRUE(config.getAddToGitignore());
+}
+
+TEST(ConfigTest, MaxOverRide) {
+
+  const option::Config config(node);
+
+  EXPECT_TRUE(config.getOverRideFormater());
+}
+TEST(ConfigTest, IdeListsNotZero) {
+
+  const option::Config config(node);
+
+  EXPECT_TRUE(config.getIdes().size() >= 1);
 }
