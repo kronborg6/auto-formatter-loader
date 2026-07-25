@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include "formatters/templateLoader.hpp"
 #include "processInfo.hpp"
 
 #include <chrono>
@@ -137,12 +138,22 @@ class TemplateEnableTest : public ::testing::Test {
 
       templateDirectory = fs::temp_directory_path() / ("setup_test_" + std::to_string(uniqueId));
       fs::create_directory(templateDirectory);
+      // process = std::make_unique<ProcessInfo>("1234", testDirectory.string(), *config,
+      // *templates);
+
+      Formatter formatter;
+      formatter.filename = ".clang-format";
+      formatter.filePath = templateDirectory / "kronborg";
+
+      template_ = std::make_unique<option::TemplateLoader>(templateDirectory);
+      template_.
     }
 
-    // void TearDown() override {
-    //   std::error_code error;
-    //   fs::remove_all(rootDirectory, error);
-    // }
+    void TearDown() override {
+      std::error_code error;
+      template_.reset();
+      // fs::remove_all(rootDirectory, error);
+    }
     option::TemplateLoader makeTemplateLoader(const fs::path& templatePath) {
       Formatter formatter;
       formatter.filename = ".clang-format";
@@ -154,6 +165,7 @@ class TemplateEnableTest : public ::testing::Test {
     fs::path templateDirectory;
     std::string path_;
     std::unordered_map<std::string, Formatter> formatters_;
+    std::unique_ptr<option::TemplateLoader> template_;
 };
 TEST_F(ProcessInfoTest, ContainsInitialPid) {
   EXPECT_TRUE(process->containPid("1234"));
