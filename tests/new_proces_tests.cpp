@@ -146,7 +146,7 @@ class TemplateEnableTest : public ::testing::Test {
       formatter.filePath = templateDirectory / "kronborg";
 
       template_ = std::make_unique<option::TemplateLoader>(templateDirectory);
-      template_.
+      // template_.
     }
 
     void TearDown() override {
