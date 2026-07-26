@@ -2,6 +2,7 @@
 
 #include "formatters/templateLoader.hpp"
 #include "processInfo.hpp"
+#include "support/temp_directory.hpp"
 
 #include <chrono>
 #include <filesystem>
@@ -72,9 +73,13 @@ class ProcessInfoTest : public ::testing::Test {
 
       fs::create_directories(testDirectory);
 
+      TempDirectory temp;
+
+      temp.createFile(".clang-format", "formatter");
+
       // Construct these according to their actual constructors.
       config = std::make_unique<option::Config>();
-      templates = std::make_unique<option::TemplateLoader>();
+      templates = std::make_unique<option::TemplateLoader>(temp.path().string());
 
       process = std::make_unique<ProcessInfo>("1234", testDirectory.string(), *config, *templates);
     }
