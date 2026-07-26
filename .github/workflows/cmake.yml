@@ -49,5 +49,8 @@ jobs:
           --config "${{ env.BUILD_TYPE }}"
 
       - name: Test
-        working-directory: ${{github.workspace}}/build
-        run: ctest -C ${{env.BUILD_TYPE}} --output-on-failure
+        run: >
+          ctest
+          --test-dir "${{ github.workspace }}/build"
+          -C "${{ env.BUILD_TYPE }}"
+          --output-on-failure
