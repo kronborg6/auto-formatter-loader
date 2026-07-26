@@ -11,14 +11,21 @@ set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
 add_executable(unit_tests
-    config.cpp
-    new_proces.cpp
+    config_tests.cpp
+    new_proces_tests.cpp
+    template_tests.cpp
+)
+
+target_include_directories(unit_tests
+    PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 target_link_libraries(unit_tests
     PRIVATE
         auto_formater_lib
         GTest::gtest_main
+        GTest::gmock
         yaml-cpp
 )
 
