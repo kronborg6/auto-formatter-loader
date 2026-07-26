@@ -204,7 +204,8 @@ TEST_F(ProcessInfoTest, StartsDisabled) {
 
 TEST_F(ProcessInfoEnableTest, DoesNothingWithoutSelectedTemplate) {
   option::Config config(node);
-  option::TemplateLoader templates{/* required arguments */};
+  TempDirectory temp;
+  option::TemplateLoader templates(temp.path().string());
 
   ProcessInfo process("1234", projectDirectory.string(), config, templates);
 
